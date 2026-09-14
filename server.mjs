@@ -1,5 +1,5 @@
 /**
- * Static file server for the Client Simulator site.
+ * Static file server for the Leakdown site.
  *
  * Zero dependencies on purpose: the site is plain files, and Railway only needs
  * something that listens on $PORT.
@@ -38,7 +38,7 @@ const SECURITY = {
 
 /* ---------------- orders: a private S3 bucket, nothing ever runs here ----------------
  * People leave a URL and an email. The operator lists orders from their own
- * machine (client-simulator --orders) and runs the ones they choose. Spam is a
+ * machine (leakdown --orders) and runs the ones they choose. Spam is a
  * row nobody runs. Credentials come from the Railway bucket's variables.
  */
 const S3 = {
@@ -227,4 +227,4 @@ createServer(async (req, res) => {
     res.writeHead(500, { "content-type": "text/plain; charset=utf-8" });
     res.end("server error\n");
   }
-}).listen(PORT, () => console.log(`client-simulator site on :${PORT}`));
+}).listen(PORT, () => console.log(`leakdown site on :${PORT}`));

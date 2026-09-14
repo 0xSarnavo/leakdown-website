@@ -5,27 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128099;</text></svg>">
 <link rel="stylesheet" href="/styles.css">
-<title>Client Simulator</title>
+<title>Leakdown</title>
 <meta name="description" content="Simulated prospects walk through your signup in a real browser, think out loud, and quit the way people do. One page tells you where they stalled and why.">
 <link rel="canonical" href="https://client-simulator-site-production.up.railway.app/">
-<meta property="og:title" content="Client Simulator">
+<meta property="og:title" content="Leakdown">
 <meta property="og:description" content="Analytics say where people leave. This says why.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="/assets/og-card.jpg">
+<meta property="og:image" content="https://client-simulator-site-production.up.railway.app/assets/og-card.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Client Simulator">
+<meta name="twitter:title" content="Leakdown">
 <meta name="twitter:description" content="Analytics say where people leave. This says why.">
-<meta name="twitter:image" content="/assets/og-card.jpg">
+<meta name="twitter:image" content="https://client-simulator-site-production.up.railway.app/assets/og-card.jpg">
 </head>
 <body>
 <div class="frame">
 <nav class="pad">
-  <a class="mark" href="/">Client Simulator</a>
+  <a class="mark" href="/">Leakdown</a>
   <a href="/#how">How it works</a>
   <a href="/#found">What it found</a>
   <a href="/#run">Run it</a>
   <a href="/#never">What it never does</a>
-  <a href="https://github.com/0xSarnavo/client-simulator" target="_blank" rel="noopener">GitHub</a>
+  <a href="https://github.com/0xSarnavo/leakdown-cli" target="_blank" rel="noopener">GitHub</a>
 </nav>
 
 <main>
@@ -43,8 +43,8 @@
     <div>
       <div class="lbl">What you type</div>
       <div class="term">
-        <div class="tbar"><span class="dots"><i></i><i></i><i></i></span><span class="tname">bash — client-simulator</span></div>
-<pre class="console"><span class="in">client-simulator yoursite.com --ladder --yes --headless</span>
+        <div class="tbar"><span class="dots"><i></i><i></i><i></i></span><span class="tname">bash — leakdown</span></div>
+<pre class="console"><span class="in">leakdown yoursite.com --ladder --yes --headless</span>
 <span class="cm">
   ladder on yoursite.com: wide haiku ×5 + muse ×5 → filter → verify → deep</span>
 
@@ -85,7 +85,7 @@
           <p><strong>Element refs cited by more than one session:</strong> <code>f4e1</code> — 3 sessions</p>
           <p><strong>Seen once, not counted</strong> — one session cited these; treat as unverified until a second run agrees: <code>f3e100</code>, <code>f4e155</code>, <code>f4e161</code></p>
           <p><strong>Measured on the page</strong> (a ruler, not a persona): <code>console.site-g.ai/</code>: 3 controls with no accessible name; 3 tap targets under 24px</p>
-          <p class="wm">client-simulator · site-g · 2026-09-14 · simulated prospects: risk signals, not measured traffic</p>
+          <p class="wm">leakdown · site-g · 2026-09-14 · simulated prospects: risk signals, not measured traffic</p>
         </div>
       </div>
     </div>
@@ -116,13 +116,13 @@
   <section class="split doors" id="run">
     <div class="door">
       <h2>Run it yourself</h2>
-<pre class="clonebox" id="clone"><code>git clone https://github.com/0xSarnavo/client-simulator
-cd client-simulator &amp;&amp; npm install &amp;&amp; npm run build
+<pre class="clonebox" id="clone"><code>git clone https://github.com/0xSarnavo/leakdown-cli
+cd leakdown-cli &amp;&amp; npm install &amp;&amp; npm run build
 npx playwright install chromium
 node dist/cli.js your-site.com --ladder --yes --headless</code></pre>
       <button class="copy" type="button" data-copy="clone">copy</button>
       <p>Needs Node 20 and one AI CLI you are already logged into: Claude Code, opencode, or Codex. No API keys. A site takes about an hour and roughly $12 of your own subscription. Then read <code>runs/your-site.com/AGGREGATE.md</code>. Nothing leaves your machine except the pages your AI provider sees during the run.</p>
-      <p><a href="https://github.com/0xSarnavo/client-simulator" target="_blank" rel="noopener">Source and docs on GitHub →</a></p>
+      <p><a href="https://github.com/0xSarnavo/leakdown-cli" target="_blank" rel="noopener">Source and docs on GitHub →</a></p>
     </div>
     <div class="door">
       <h2 id="request-h">Request a run</h2>
@@ -153,14 +153,14 @@ node dist/cli.js your-site.com --ladder --yes --headless</code></pre>
     <h2 class="closeline"><span>They walk out like real customers do.</span><span>Every one of them says why.</span></h2>
     <div class="closebtns">
       <a class="btn" href="#request">Request a run</a>
-      <a class="btn ghost" href="https://github.com/0xSarnavo/client-simulator" target="_blank" rel="noopener">View on GitHub →</a>
+      <a class="btn ghost" href="https://github.com/0xSarnavo/leakdown-cli" target="_blank" rel="noopener">View on GitHub →</a>
     </div>
   </section>
 </main>
 
 <footer>
   <nav class="flinks" aria-label="Elsewhere">
-    <a href="https://github.com/0xSarnavo/client-simulator" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/0xSarnavo/leakdown-cli" target="_blank" rel="noopener">GitHub</a>
     <a href="mailto:sssarnavo@gmail.com">Email</a>
     <a href="https://x.com/0xSarnavo" target="_blank" rel="noopener">X</a>
     <a href="https://www.linkedin.com/in/sarnavo/" target="_blank" rel="noopener">LinkedIn</a>

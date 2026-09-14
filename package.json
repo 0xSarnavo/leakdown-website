@@ -1,8 +1,9 @@
 {
-  "name": "client-simulator-site",
+  "name": "leakdown-website",
   "version": "1.0.0",
   "private": true,
-  "description": "Marketing site for Client Simulator, built from real run data",
+  "description": "Leakdown marketing site + alpha request API (Railway)",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "start": "node server.mjs"
