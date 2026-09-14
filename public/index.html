@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128099;</text></svg>">
+<link rel="stylesheet" href="/styles.css">
+<title>Client Simulator</title>
+<meta name="description" content="Simulated prospects walk through your signup in a real browser, think out loud, and quit the way people do. One page tells you where they stalled and why.">
+<link rel="canonical" href="https://client-simulator-site-production.up.railway.app/">
+<meta property="og:title" content="Client Simulator">
+<meta property="og:description" content="Analytics say where people leave. This says why.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Client Simulator">
+<meta name="twitter:description" content="Analytics say where people leave. This says why.">
+<meta name="twitter:image" content="/assets/og-card.jpg">
+</head>
+<body>
+<div class="frame">
+<nav class="pad">
+  <a class="mark" href="/">Client Simulator</a>
+  <a href="/#how">How it works</a>
+  <a href="/#found">What it found</a>
+  <a href="/#run">Run it</a>
+  <a href="/#never">What it never does</a>
+  <a href="https://github.com/0xSarnavo/client-simulator" target="_blank" rel="noopener">GitHub</a>
+</nav>
+
+<main>
+  <section class="hero">
+    <h1><span>Analytics say where people leave.</span><span>This says why.</span></h1>
+    <p class="sub">Simulated prospects walk through your signup in a real browser, think out loud, and quit the way people do. You get one page: where they stalled, in their words, the element they were on, and a line to check it yourself. An expert layer proposes the fix.</p>
+    <div class="herocta">
+      <a class="btn" href="#request">Request a run</a>
+      <a class="btn ghost" href="#run">Run it yourself</a>
+    </div>
+    <p class="fine">Alpha. Open source, MIT. Runs on the AI subscription you already have, no API keys.</p>
+  </section>
+
+  <section class="split">
+    <div>
+      <div class="lbl">What you type</div>
+      <div class="term">
+        <div class="tbar"><span class="dots"><i></i><i></i><i></i></span><span class="tname">bash — client-simulator</span></div>
+<pre class="console"><span class="in">client-simulator yoursite.com --ladder --yes --headless</span>
+<span class="cm">
+  ladder on yoursite.com: wide haiku ×5 + muse ×5 → filter → verify → deep</span>
+
+  <span class="ok">▸</span> site      read the page, built the brief
+  <span class="ok">▸</span> map       200 pages, 2 payment surfaces, 9 broken links
+  <span class="ok">▸</span> personas  10 prospects: core, adjacent, edge
+  <span class="ok">▸</span> visit     10 queued, one at a time
+
+  <span class="q">[Laodike]</span> "Third time the workspace form reset. This is broken."
+  <span class="q">[Momus]</span>   "Section 5 of the terms is headings with no text."
+  <span class="q">[Iphis]</span>   "Got the code, typed it, the field went grey. Now what?"
+
+  <span class="ok">▸</span> filter    3 replicated refs, 7 single-source
+  <span class="ok">▸</span> verify    3 sessions reviewed
+  <span class="ok">▸</span> deep      re-walked the hardest prospect
+  <span class="ok">▸</span> report    runs/yoursite.com/AGGREGATE.md
+</pre>
+      </div>
+    </div>
+    <div>
+      <div class="lbl">What you get</div>
+      <div class="browser">
+        <div class="bbar"><span class="dots"><i></i><i></i><i></i></span><span class="url">AGGREGATE.md — a real run, 2026-09-14. The site is named once its owner agrees.</span></div>
+        <div class="doc">
+          <h1>site-g — what 26 simulated prospects hit</h1>
+          <p class="readas">Read as: risk signals about where real visitors could stall, not measured traffic. Full session table and every quote: DETAIL.md.</p>
+          <h2>The one number</h2>
+          <p><strong>2 of 26 completed their goal.</strong> 6 walked out with a reason. 18 ran out of patience still trying.</p>
+          <h2>Fix these first</h2>
+          <h3>1. <code>console.site-g.ai/org/create</code> — 3 of 26 walked out here</h3>
+          <p><strong>Who:</strong> Jamal Washington (Product Manager), Maya O'Brien (Mid-career Engineer, Between Roles), Hassan Mustafa (Engineer with Low Vision, Non-Native Speaker)</p>
+          <p><strong>In their words:</strong> "The workspace creation form keeps resetting after I click 'Create workspace'—I've tried three times and it never actually creates the workspace. The field disables (suggesting processing) but then the page resets to an empty form. This is a fundamental blocker…"</p>
+          <p><strong>Check it yourself:</strong> open <code>console.site-g.ai/org/create</code>. Right before leaving they were thinking: "I've typed 'ai-learning' again into the workspace name field—this is the third time I've done this…" → clicked f4e251; then "This is broken. I've now tried to create a workspace three times—steps 13, 14, 16, 17—and each time the form resets instead of actually creating it…" → abandon.</p>
+          <h3>2. <code>site-g.ai/terms</code> — 2 of 26 walked out here</h3>
+          <p><strong>Who:</strong> Priya Desai (AI Research Lead), Richard Kim (Security Officer)</p>
+          <p><strong>In their words:</strong> "SOC2 Type II certification is not documented anywhere on their Privacy or Terms pages despite thorough review… Section 5 of Terms isn't displaying actual content—only labels."</p>
+          <h2>For developers</h2>
+          <p><strong>Element refs cited by more than one session:</strong> <code>f4e1</code> — 3 sessions</p>
+          <p><strong>Seen once, not counted</strong> — one session cited these; treat as unverified until a second run agrees: <code>f3e100</code>, <code>f4e155</code>, <code>f4e161</code></p>
+          <p><strong>Measured on the page</strong> (a ruler, not a persona): <code>console.site-g.ai/</code>: 3 controls with no accessible name; 3 tap targets under 24px</p>
+          <p class="wm">client-simulator · site-g · 2026-09-14 · simulated prospects: risk signals, not measured traffic</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gridsec" id="how">
+    <div class="sechead"><h2>How a run works</h2></div>
+    <div class="cards">
+      <article class="card"><span class="k">01</span><h3>Read the site</h3><p>What it sells, to whom, where signup is. Then a crawler walks two clicks from the landing page plus the sitemap, with no AI, so the report can later say which pages nobody found and which links are broken.</p></article>
+      <article class="card"><span class="k">02</span><h3>Build ten prospects</h3><p>Core customers, adjacent roles, and people who are not the target at all, each fitted to the product. Each gets its own email address, so verification codes and magic links are read and used, not guessed at.</p></article>
+      <article class="card"><span class="k">03</span><h3>Send them in</h3><p>Each prospect drives a real browser one viewport at a time and thinks aloud at every step until it finishes, walks out with a reason, or runs out of patience. Every step is logged and recorded on video.</p></article>
+      <article class="card"><span class="k">04</span><h3>Climb the ladder</h3><p>Cheap models vote: half the prospects run on haiku, half on a free model. A mechanical filter keeps only what more than one session cites. A verifier reviews those sessions. A stronger model re-walks the hardest prospect and writes the report you read.</p></article>
+    </div>
+  </section>
+
+  <section class="gridsec" id="found">
+    <div class="sechead"><h2>What it has found so far</h2><p class="sub">Three real sites, September 2026. Names withheld until the owners agree.</p></div>
+    <div class="cards three">
+      <article class="card"><h3>Four signup buttons with no label</h3><p>A screen reader announces each as "button" and nothing else. 14 sessions across 5 models cited the same four elements. The page ruler now catches this on the first load.</p></article>
+      <article class="card"><h3>A workspace form that resets</h3><p>Submit, the field disables, the page comes back empty. 3 of 26 prospects walked out on that page. The quote in the report above is one of them.</p></article>
+      <article class="card"><h3>A terms page with empty sections</h3><p>Section 5, "Data and Privacy", shows sub-headings and no text. Two security-minded prospects left over it, and neither found the compliance detail they came for.</p></article>
+      <article class="card"><h3>Same prospect, five runs</h3><p>A prospect who knew the price and the signup path ended the same way, on the same page, 5 of 5 times. A low-tech edge prospect agreed with itself half the time, so a finding one session made earns a second run before the report counts it.</p></article>
+      <article class="card"><h3>Email walls are walked through</h3><p>Prospects receive real verification codes and type them in. When no mail arrives, the report says its email verdicts are unverified instead of blaming your site.</p></article>
+      <article class="card"><h3>Measured, not felt</h3><p>Beside every prospect's opinion sits a ruler: controls with no accessible name, tap targets under 24px, sideways scroll, a missing viewport tag. Those lines you can verify without trusting anyone.</p></article>
+    </div>
+  </section>
+
+  <section class="split doors" id="run">
+    <div class="door">
+      <h2>Run it yourself</h2>
+<pre class="clonebox" id="clone"><code>git clone https://github.com/0xSarnavo/client-simulator
+cd client-simulator &amp;&amp; npm install &amp;&amp; npm run build
+npx playwright install chromium
+node dist/cli.js your-site.com --ladder --yes --headless</code></pre>
+      <button class="copy" type="button" data-copy="clone">copy</button>
+      <p>Needs Node 20 and one AI CLI you are already logged into: Claude Code, opencode, or Codex. No API keys. A site takes about an hour and roughly $12 of your own subscription. Then read <code>runs/your-site.com/AGGREGATE.md</code>. Nothing leaves your machine except the pages your AI provider sees during the run.</p>
+      <p><a href="https://github.com/0xSarnavo/client-simulator" target="_blank" rel="noopener">Source and docs on GitHub →</a></p>
+    </div>
+    <div class="door">
+      <h2 id="request-h">Request a run</h2>
+      <form id="request" class="request" hidden aria-labelledby="request-h">
+        <p>Leave your site and an email. I run it by hand on my laptop and send you the report as a PDF. Alpha: a few free runs, one request per email per day.</p>
+        <label>Site <input name="url" type="url" placeholder="https://your-site.com" required autocomplete="url" inputmode="url"></label>
+        <label>Email <input name="email" type="email" placeholder="you@company.com" required autocomplete="email"></label>
+        <label class="consent"><input name="consent" type="checkbox" required> <span>I own this site or am authorised to test it. Simulated prospects will click through signup and booking forms; they never pay, book, or sign in with Google. My URL and email are stored privately, used only to send this report, and deleted when I ask. I have read the <a href="/privacy">privacy policy</a> and agree to the <a href="/terms">terms</a>.</span></label>
+        <button class="btn" type="submit">Request a run</button>
+        <p class="reqmsg" aria-live="polite"></p>
+      </form>
+      <p id="closed">Requests are closed right now. Run it yourself, or <a href="mailto:sssarnavo@gmail.com">email me</a>.</p>
+    </div>
+  </section>
+
+  <section class="gridsec" id="never">
+    <div class="sechead"><h2>What it never does</h2></div>
+    <ul class="never">
+      <li><b>Pay, book a meeting, or sign in with Google, GitHub, or SSO.</b> A guard refuses the action itself, on any page. Reaching the wall is the finding. The guard matches labels, so do not point it at a live checkout and assume it cannot buy.</li>
+      <li><b>Report one voice as truth.</b> A finding only one session made is listed under "seen once, not counted", never presented as verified.</li>
+      <li><b>Measure your traffic.</b> A simulated prospect stalling is a signal that real visitors could. It is never a percentage of your users or a conversion number, and every report says so.</li>
+      <li><b>Know your site in advance.</b> Cold prospects arrive knowing nothing, warm ones know the pitch, hot ones know the price and the signup path.</li>
+      <li><b>Track you here.</b> This site sets no cookies, loads no analytics, no third-party scripts and no external fonts. The request form stores what you type and nothing else. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>.</li>
+    </ul>
+  </section>
+
+  <section class="closer">
+    <h2 class="closeline"><span>They walk out like real customers do.</span><span>Every one of them says why.</span></h2>
+    <div class="closebtns">
+      <a class="btn" href="#request">Request a run</a>
+      <a class="btn ghost" href="https://github.com/0xSarnavo/client-simulator" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <nav class="flinks" aria-label="Elsewhere">
+    <a href="https://github.com/0xSarnavo/client-simulator" target="_blank" rel="noopener">GitHub</a>
+    <a href="mailto:sssarnavo@gmail.com">Email</a>
+    <a href="https://x.com/0xSarnavo" target="_blank" rel="noopener">X</a>
+    <a href="https://www.linkedin.com/in/sarnavo/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+  </nav>
+  <span>© 2026 Sarnavo Saha Sardar · MIT licensed tool · alpha</span>
+</footer>
+</div>
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128099;</text></svg>">
+<link rel="stylesheet" href="/styles.css">
+<title>Terms — Client Simulator</title>
+<meta name="description" content="Terms for requesting a Client Simulator run and for using the report.">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<div class="frame">
+<nav class="pad">
+  <a class="mark" href="/">Client Simulator</a>
+  <a href="/#how">How it works</a>
+  <a href="/#found">What it found</a>
+  <a href="/#run">Run it</a>
+  <a href="/#never">What it never does</a>
+  <a href="https://github.com/0xSarnavo/client-simulator" target="_blank" rel="noopener">GitHub</a>
+</nav>
+<main class="prose">
+  <h1>Terms of service</h1>
+  <p class="updated">Last updated 14 September 2026.</p>
+
+  <p>These terms cover the run-request service on this website, operated by Sarnavo Saha Sardar, an individual based in India ("the operator"). The open-source tool is separately licensed under the MIT licence in its repository; these terms do not change that licence.</p>
+
+  <h2>1. What the service is</h2>
+  <p>You give a site URL and an email address. The operator may run simulated prospects through that site and email you a report. The service is in alpha: runs are free, offered at the operator's discretion, and any request may be declined or left unfulfilled without notice. There is no service level.</p>
+
+  <h2>2. You must be allowed to test the site</h2>
+  <p>By submitting a request you confirm that you own the site or are authorised by its owner to have it tested this way. Do not submit sites you do not control. The operator may ask for proof and will refuse requests that look unauthorised.</p>
+
+  <h2>3. What a run does to your site</h2>
+  <p>Simulated prospects behave like visitors. They will load pages, fill in signup and booking forms, create accounts with throwaway email addresses, and read the verification emails your site sends to those addresses. Expect test accounts in your database, sessions in your analytics, and emails in your sending logs. You are responsible for cleaning those up and for telling anyone on your side who needs to know.</p>
+  <p>A guard refuses payments, booking confirmations and third-party sign-in (Google, GitHub, SSO) at the action itself. It matches button labels and is best effort. Do not request a run on a live checkout and rely on it never buying anything.</p>
+
+  <h2>4. What the report is</h2>
+  <p>The report describes what simulated prospects did and said. It is a risk signal about where real visitors could stall. It is not a measurement of your traffic, your conversion rate or your users, and it is not a security audit, an accessibility certification or professional advice. Findings that only one session made are marked as unverified. You decide what to act on.</p>
+
+  <h2>5. Acceptable use</h2>
+  <ul>
+    <li>Only sites you own or are authorised to test.</li>
+    <li>No use to probe, load-test or gather information about a third party.</li>
+    <li>No sites whose content or purpose is unlawful in India or where they operate.</li>
+    <li>No attempts to abuse the request form, the rate limit or the storage behind it.</li>
+  </ul>
+
+  <h2>6. Your data</h2>
+  <p>How your request and the run's output are handled is in the <a href="/privacy">privacy policy</a>, which is part of these terms.</p>
+
+  <h2>7. Ownership</h2>
+  <p>The report is yours to use, share and quote. The tool is MIT licensed. The text and design of this website are the operator's. A tested site is named publicly only with its owner's written consent.</p>
+
+  <h2>8. No warranty</h2>
+  <p>The service and every report are provided as is, without any warranty, express or implied, including fitness for a particular purpose. Simulated prospects can be wrong, miss things, or misread a page.</p>
+
+  <h2>9. Limitation of liability</h2>
+  <p>To the fullest extent permitted by law, the operator is not liable for any indirect, incidental or consequential loss, or for any loss of data, revenue or business, arising from a run, a report, or a decision you make because of one. Where liability cannot be excluded it is limited to the amount you paid for the service, which during the alpha is nothing.</p>
+
+  <h2>10. Ending the service</h2>
+  <p>The operator may pause or stop the service, or refuse any request, at any time. You may withdraw a request or ask for your data to be deleted at any time by email.</p>
+
+  <h2>11. Governing law</h2>
+  <p>These terms are governed by the laws of India. Disputes are subject to the jurisdiction of the courts of India.</p>
+
+  <h2>12. Changes</h2>
+  <p>Changes are made here, with the date at the top. Continuing to use the service after a change means you accept it.</p>
+
+  <h2>Contact</h2>
+  <p><a href="mailto:sssarnavo@gmail.com">sssarnavo@gmail.com</a></p>
+</main>
+<footer>
+  <nav class="flinks" aria-label="Elsewhere">
+    <a href="https://github.com/0xSarnavo/client-simulator" target="_blank" rel="noopener">GitHub</a>
+    <a href="mailto:sssarnavo@gmail.com">Email</a>
+    <a href="https://x.com/0xSarnavo" target="_blank" rel="noopener">X</a>
+    <a href="https://www.linkedin.com/in/sarnavo/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+  </nav>
+  <span>© 2026 Sarnavo Saha Sardar · MIT licensed tool · alpha</span>
+</footer>
+</div>
+</body>
+</html>

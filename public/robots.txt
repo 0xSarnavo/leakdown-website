@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /orders
+Sitemap: https://client-simulator-site-production.up.railway.app/sitemap.xml
