@@ -5,6 +5,8 @@ Cutting a release moves that block under a version heading and bumps `package.js
 
 ## Unreleased
 
+- Pin `engines.node` to `24.x`, the newest Vercel offers for builds and functions (26 exists only in their Sandbox product). The old `>=20` let a host pick up a new Node major on its own, and both Vercel and Nixpacks read this field, so the two deploys now agree.
+- The hero no longer fades in on load. The headline lines and the drop paint at full opacity on the first frame, which is also what a link preview and a skimming visitor see. Removes the `rise-in` keyframe, which was defined twice in the stylesheet.
 - Runs on Vercel as well as Railway, with no per-host code. The CSP nonce uses `btoa` instead of `Buffer`, so middleware is fine on the Edge runtime; API routes pin `runtime = "nodejs"` for the SigV4 signer; the client IP prefers Vercel's signed `x-vercel-forwarded-for` and still takes the first entry otherwise. The per-IP rate limit moves to Upstash Redis over REST when `UPSTASH_REDIS_REST_URL` and `_TOKEN` are set (no SDK, one fetch), since a module-level Map only holds on one long-lived box; it fails open and logs.
 - Repo cleanup: dropped the dead `how-section.tsx` component, `hero-graphic.svg`, and the two hero JPEGs the CSS stopped painting (moved to `../local/hero-artwork/`, 556K out of the deploy). The hero background rules no longer carry `background-image: none`.
 - Live readout: between 720px and 900px the log used to sit on top of the leak tags. The stacked narrow layout now applies under 900px.
