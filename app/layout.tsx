@@ -5,25 +5,26 @@ import SiteFooter from "../components/site-footer";
 import RevealInit from "../components/reveal-init";
 import FaviconAnim from "../components/favicon-anim";
 import SiteDialogs from "../components/site-dialogs";
+import { SITE } from "../lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://leakdown.ai"),
+  metadataBase: new URL(SITE),
   title: "Leakdown",
   description:
     "Simulated prospects walk through your signup in a real browser, think out loud, and quit the way people do. One page tells you where they stalled and why.",
-  alternates: { canonical: "https://leakdown.ai/" },
+  alternates: { canonical: `${SITE}/` },
   openGraph: {
     title: "Leakdown",
     description: "Analytics say where people leave. This says why.",
     type: "website",
-    url: "https://leakdown.ai/",
-    images: ["https://leakdown.ai/assets/og-card.jpg"],
+    url: `${SITE}/`,
+    images: [`${SITE}/assets/og-card.jpg`],
   },
   twitter: {
     card: "summary_large_image",
     title: "Leakdown",
     description: "Analytics say where people leave. This says why.",
-    images: ["https://leakdown.ai/assets/og-card.jpg"],
+    images: [`${SITE}/assets/og-card.jpg`],
   },
 };
 

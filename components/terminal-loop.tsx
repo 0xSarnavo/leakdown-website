@@ -62,7 +62,7 @@ const LADDER: Ev[] = [
   { k: "out", segs: [[bar(0, 10), "t-bar"]], d: 160 },
   gap(),
   o(520, ["  [priya] ", "t-tag"], ["[1/12 · 2/10 confusion] ", "t-dim"], ["Priya: "], ['"Pricing is clear. Starting on the free tier."', "t-quote"]),
-  o(460, ["  [marcus] ", "t-tag"], ["mailbox: ", "t-dim"], ["marcus.4f1c@inbox.leakdown.ai", "t-path"]),
+  o(460, ["  [marcus] ", "t-tag"], ["mailbox: ", "t-dim"], ["marcus.4f1c@inbox.leakdown.dev", "t-path"]),
   o(520, ["  [lena] ", "t-tag"], ["[1/10 · 3/10 confusion] ", "t-dim"], ["Lena: "], ['"Docs first. I want to see the API before I sign up."', "t-quote"]),
   o(480, ["  [marcus] ", "t-tag"], ["📬 checking inbox (5s)...", "t-dim"]),
   o(560, ["  [priya] ", "t-tag"], ["[4/12 · 6/10 confusion] ", "t-dim"], ["Priya: "], ['"This reads like a done page. Where is continue?"', "t-quote"]),

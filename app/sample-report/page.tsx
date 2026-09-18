@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { EXT, REPO } from "../../lib/site";
+import { SITE } from "../../lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
   title: "Sample report — Leakdown",
   description:
     "Anonymized excerpt from a settled Leakdown run: what a finding looks like, with check-it-yourself steps.",
-  alternates: { canonical: "https://leakdown.ai/sample-report" },
+  alternates: { canonical: `${SITE}/sample-report` },
 };
 
 const FINDINGS = [

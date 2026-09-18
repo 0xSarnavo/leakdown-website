@@ -16,8 +16,8 @@ const nextConfig = {
   async redirects() {
     // the docs moved to their own site (leakdown-docs)
     return [
-      { source: "/docs", destination: "https://docs.leakdown.ai/introduction", permanent: false },
-      { source: "/docs/:path*", destination: "https://docs.leakdown.ai/:path*", permanent: false },
+      { source: "/docs", destination: "https://docs.leakdown.dev/introduction", permanent: false },
+      { source: "/docs/:path*", destination: "https://docs.leakdown.dev/:path*", permanent: false },
     ];
   },
   async rewrites() {

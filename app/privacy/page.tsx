@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { SITE } from "../../lib/site";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Privacy — Leakdown",
   description: "What Leakdown collects when you request a run, and what it never does.",
-  alternates: { canonical: "https://leakdown.ai/privacy" },
+  alternates: { canonical: `${SITE}/privacy` },
 };
 
 export default function Privacy() {

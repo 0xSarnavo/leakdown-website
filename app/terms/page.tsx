@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { SITE } from "../../lib/site";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Terms — Leakdown",
   description: "Ground rules for the Leakdown alpha: what the service is and is not.",
-  alternates: { canonical: "https://leakdown.ai/terms" },
+  alternates: { canonical: `${SITE}/terms` },
 };
 
 export default function Terms() {
