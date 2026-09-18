@@ -10,7 +10,7 @@ import { useState } from "react";
 const ITEMS: Array<[string, string]> = [
   [
     "What happens when I request a run, and what do you collect?",
-    "It is a free early-access demo: we run a full run (or the special run you asked for) on our side and email you the report. We collect your site URL, your email, your run choice and brief, and whether you allow public sharing. We keep the run's videos, logs and screenshots of your site with the report. No cookies, no trackers, nothing sold, and everything is deleted when you ask. Findings go public only if you opt in, and only once they are fixed.",
+    "It is a free early-access demo: we run a full run (or the special run you asked for) on our side and email you the report. We collect your site URL, your email, your run choice and brief, and whether you allow public sharing. We keep the run's videos, logs and screenshots of your site with the report. Nothing is sold, and everything is deleted when you ask. This site has its own analytics, described in the privacy policy; the site we test for you is never tracked. Findings go public only if you opt in, and only once they are fixed.",
   ],
   [
     "Is it safe to point the CLI at my site?",
@@ -18,15 +18,15 @@ const ITEMS: Array<[string, string]> = [
   ],
   [
     "What will the CLI never do?",
-    "Pay, book a meeting, or sign in with Google, GitHub or SSO. Reaching that wall is the finding, and a guard refuses the commit. The matching is best effort, so don’t point it at a live checkout and assume it can’t buy.",
+    "A guard refuses three things at the action itself: paying, confirming a booking, and signing in with Google, GitHub or SSO. Reaching that wall is the finding. The matching is best effort, so don’t point it at a live checkout and assume it can’t buy. Four more — deleting data, inviting teammates, publishing anything, and opening support chat or contacting third parties — are a rule the prospects are told to follow, not machinery: a “request a demo” form or a trial that needs no card can still be submitted.",
   ],
   [
     "Where does the CLI keep my data?",
-    "Everything lands under runs/<site>/ on the machine that ran it. Nothing is uploaded. Delete a site with rm -rf runs/<site>. Requested runs keep your URL and email privately, only to send the report.",
+    "Everything lands under runs/<site>/ on the machine that ran it — nothing goes to us. Your AI CLI does see each page your prospects visit, and any verification emails they read, under that provider’s terms. Delete a site with rm -rf runs/<site>. Requested runs keep your URL and email privately, only to send the report.",
   ],
   [
     "What does the CLI cost?",
-    "The CLI is MIT and runs on the AI CLI subscription you already have (Claude Code, opencode or Codex), with no API keys. Early access includes a few free requested runs.",
+    "The CLI is MIT and runs on the AI CLI subscription you already have (Claude Code, opencode or Codex), with no API keys — check that provider’s terms and rate limits for automated use, and expect a long sweep to hit a personal subscription’s limit. Requested runs are free during early access, one per day, and run at our discretion.",
   ],
   [
     "How long does a CLI run take?",

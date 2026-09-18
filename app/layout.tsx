@@ -5,6 +5,7 @@ import SiteFooter from "../components/site-footer";
 import RevealInit from "../components/reveal-init";
 import FaviconAnim from "../components/favicon-anim";
 import SiteDialogs from "../components/site-dialogs";
+import Analytics from "../components/analytics";
 import { SITE } from "../lib/site";
 
 export const metadata: Metadata = {
@@ -54,6 +55,7 @@ export default function RootLayout({
         {children}
         <SiteFooter />
         <SiteDialogs />
+        <Analytics />
       </body>
     </html>
   );

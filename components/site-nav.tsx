@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { trackRepo } from "./track";
 import { DOCS, EXT, REPO } from "../lib/site";
 import LogoMark from "./logo-mark";
 
@@ -147,7 +148,7 @@ export default function SiteNav() {
         </a>
       </div>
       <span className="sp"></span>
-        <a className="icon-btn" href={REPO} {...EXT} aria-label="Leakdown CLI on GitHub">
+        <a className="icon-btn" href={REPO} {...EXT} onClick={() => trackRepo("nav")} aria-label="Leakdown CLI on GitHub">
           <svg
             viewBox="0 0 24 24"
             width="18"
@@ -224,7 +225,7 @@ export default function SiteNav() {
         <a href={DOCS} {...EXT} onClick={() => setMenu(false)}>
           <b>05</b>Docs ↗
         </a>
-        <a href={REPO} {...EXT} onClick={() => setMenu(false)}>
+        <a href={REPO} {...EXT} onClick={() => { trackRepo("menu"); setMenu(false); }}>
           <b>06</b>GitHub ↗
         </a>
       </div>

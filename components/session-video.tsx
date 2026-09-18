@@ -56,10 +56,12 @@ export default function SessionVideo({ className, src, ariaLabel }: Props) {
   }, []);
 
   return (
+    /* Two sources, MP4 first: Safari and iOS play H.264 and not VP8, so a
+       webm-only clip rendered as an empty box on every Apple device — on a page
+       whose whole job is showing what a session looks like. */
     <video
       ref={ref}
       className={className}
-      src={src}
       aria-label={ariaLabel}
       muted
       loop
@@ -67,6 +69,9 @@ export default function SessionVideo({ className, src, ariaLabel }: Props) {
       preload="metadata"
       controls={reduced}
       disablePictureInPicture
-    />
+    >
+      <source src={src.replace(/\.webm$/, ".mp4")} type="video/mp4" />
+      <source src={src} type="video/webm" />
+    </video>
   );
 }

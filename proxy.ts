@@ -22,8 +22,17 @@ export function proxy(request: NextRequest) {
     "default-src 'self'",
     "img-src 'self' data:",
     `style-src 'self' 'nonce-${nonce}'`,
-    `script-src 'self' 'nonce-${nonce}'`,
+    /* Cloudflare's human check is the one third-party script on the site, and it
+       is named here rather than trusted by a wildcard: the widget's own iframe
+       does its network work, so connect-src stays 'self'. Without a site key
+       nothing loads from here at all. */
+    `script-src 'self' 'nonce-${nonce}' https://challenges.cloudflare.com`,
+    "frame-src 'self' https://challenges.cloudflare.com",
     "connect-src 'self'",
+    // PostHog's session replay compresses events in a worker it creates from a
+    // blob. Everything else it does is same-origin via the /ingest rewrites, so
+    // this is the only allowance analytics needs; no third-party origin is added.
+    "worker-src 'self' blob:",
     "object-src 'none'",
     "frame-ancestors 'none'",
     "base-uri 'self'",

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { CONTACT } from "../lib/site";
+import Turnstile, { useTurnstile } from "./turnstile";
 
 /* Request door, ported 1:1 from public/app.js (26 lines). Legacy paths only:
    probe GET /orders (401 opens), submit POST /request {url,email,consent},
@@ -9,7 +11,7 @@ import { useEffect, useRef, useState } from "react";
    All EXACT strings byte-identical, including the ellipsis and the em dash
    in the server one-per-day 429 (rendered verbatim from {error}). */
 const SENDING = "sending…";
-const SUCCESS = "Got it. You will get an email when the run is done.";
+const SUCCESS = "Got it. Runs are done by hand, so this is a queue, not a promise — you will get an email when yours is run.";
 const NETFAIL = "Could not send. Try again.";
 
 // what a full run includes, in one line under the run choice
@@ -23,6 +25,8 @@ export default function RequestForm({ idPrefix = "request" }: { idPrefix?: strin
   const [tone, setTone] = useState("");
   const [plan, setPlan] = useState<"full" | "special">("full");
   const formRef = useRef<HTMLFormElement>(null);
+  // "request-run" is checked again on the server: a token minted elsewhere is refused
+  const turnstile = useTurnstile("request-run");
 
   useEffect(() => {
     fetch("/orders", { cache: "no-store", credentials: "omit" })
@@ -52,9 +56,11 @@ export default function RequestForm({ idPrefix = "request" }: { idPrefix?: strin
           plan,
           brief: plan === "special" ? f.get("brief") : undefined,
           publish: f.get("publish") === "on",
+          token: turnstile.token(),
         }),
       });
       const b = await r.json();
+      turnstile.reset(); // the token just spent cannot be spent twice
       if (r.ok) {
         setTone("is-ok");
         setMsg(SUCCESS);
@@ -91,6 +97,15 @@ export default function RequestForm({ idPrefix = "request" }: { idPrefix?: strin
             inputMode="url"
           />
         </label>
+        {/* The commonest wasted run: a site whose front door is shut to us.
+            Turnstile, reCAPTCHA and WAF challenges stop the prospects before
+            they reach a form, and the report comes back empty through no fault
+            of the signup. Better to say so here than to spend the run. */}
+        <p className="rq-hint">
+          Staging works best. Bot protection — Cloudflare Turnstile, reCAPTCHA, a WAF — stops
+          simulated prospects at the door, and the run finds nothing. On production, allow-list us
+          or turn the challenge off while we test.
+        </p>
         <label className="rq-field">
           Email{" "}
           <input
@@ -132,9 +147,10 @@ export default function RequestForm({ idPrefix = "request" }: { idPrefix?: strin
           <input name="consent" type="checkbox" required />{" "}
           <span>
             I own this site or am authorised to test it. Simulated prospects will click through
-            signup and booking forms; they never pay, book, or sign in with Google. My URL and
-            email are stored privately, used only to send this report, and deleted when I ask. I
-            have read the <a href="/privacy">privacy policy</a> and agree to the{" "}
+            signup and booking forms, create test accounts, and read the verification mail my site
+            sends them; a best-effort guard refuses payments, bookings and Google or SSO sign-in. My
+            URL and email are stored privately, used only to send this report, and deleted when I
+            ask. I have read the <a href="/privacy">privacy policy</a> and agree to the{" "}
             <a href="/terms">terms</a>.
           </span>
         </label>
@@ -145,17 +161,18 @@ export default function RequestForm({ idPrefix = "request" }: { idPrefix?: strin
             case studies and ads.
           </span>
         </label>
+        <Turnstile innerRef={turnstile.ref} />
         <button className="btn rq-submit" type="submit">
           Request a run
         </button>
-        <p className="rq-after">The report lands in your inbox.</p>
+        <p className="rq-after">The report lands in your inbox, as a PDF.</p>
         <p className={tone ? `reqmsg ${tone}` : "reqmsg"} aria-live="polite">
           {msg}
         </p>
       </form>
       <p className="small" id={`${idPrefix}-closed`} hidden={open}>
         Requests are closed right now. Run it yourself, or{" "}
-        <a href="mailto:sssarnavo@gmail.com">email me</a>.
+        <a href={`mailto:${CONTACT}`}>email me</a>.
       </p>
     </>
   );

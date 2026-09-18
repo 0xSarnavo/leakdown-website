@@ -58,15 +58,18 @@ export default function SampleReport() {
           <h3>How this was produced</h3>
           <p>
             Ten prospects — core customers, adjacent roles, people outside the target — each
-            drove a real browser one viewport at a time until they finished, walked out, or ran
-            out of patience. Cheap models voted; a filter kept only what more than one session
-            cited; a verifier reviewed; a stronger model re-walked the hardest prospect. Every
-            step logged, every run recorded.
+            drove a real browser one viewport at a time until they finished, walked out, ran out
+            of patience, or got stuck. This one was a full ladder run: cheap models voted, a
+            filter kept only what more than one session cited, a verifier reviewed, and a
+            stronger model re-walked the hardest prospect. Every step logged, every run recorded.
           </p>
           <h3>What you get for your own site</h3>
           <p>
-            The videos, the session logs, a full REPORT.md, a one-page AGGREGATE.md, and FIXES.md
-            with check-it-yourself steps. Requested runs land the same report in your mail.
+            Run it yourself and everything stays on your machine: the videos, the session logs, a
+            one-page AGGREGATE.md, DETAIL.md behind it, and FIXES.md with check-it-yourself steps
+            — plus REPORT.md when you run the ladder. Ask us for a run instead and you get the
+            report as a PDF by email; the recordings and logs stay on our machine and are deleted
+            when you ask.
           </p>
         </div>
         <div className="cta-row" data-reveal>

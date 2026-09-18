@@ -1,4 +1,4 @@
-import { DOCS, REPO, ext } from "../lib/site";
+import { CONTACT, DOCS, REPO, ext } from "../lib/site";
 import LogoMark, { MARK_BOX, MARK_DOTS } from "./logo-mark";
 
 /* Footer: brand + links on top, a rule with the copyright, then the giant
@@ -110,7 +110,7 @@ const SOCIAL: Array<[string, string, keyof typeof Icon]> = [
   ["GitHub", REPO, "github"],
   ["X", "https://x.com/0xSarnavo", "x"],
   ["LinkedIn", "https://www.linkedin.com/in/sarnavo/", "linkedin"],
-  ["Email", "mailto:sssarnavo@gmail.com", "mail"],
+  ["Email", `mailto:${CONTACT}`, "mail"],
 ];
 
 const COLS: Array<[string, Array<[string, string]>]> = [
@@ -138,7 +138,7 @@ const COLS: Array<[string, Array<[string, string]>]> = [
     [
       ["Privacy", "/privacy"],
       ["Terms", "/terms"],
-      ["Contact", "mailto:sssarnavo@gmail.com"],
+      ["Contact", `mailto:${CONTACT}`],
     ],
   ],
 ];

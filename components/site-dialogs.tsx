@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Turnstile, { useTurnstile } from "./turnstile";
 import RequestForm from "./request-form";
 import LogoMark from "./logo-mark";
+import { CONTACT } from "../lib/site";
 
 /* The two site-wide popups. Any element with data-open="request" or
    data-open="early" opens its box (links keep an href, so without JS they
@@ -52,13 +54,17 @@ function Box({ id, title, open, onClose, children }: {
 }
 
 function EarlyForm() {
+  const turnstile = useTurnstile("early-access");
   const [msg, setMsg] = useState("");
   const [tone, setTone] = useState("");
   const [done, setDone] = useState(false);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const email = new FormData(form).get("email");
+    const data = new FormData(form);
+    const email = data.get("email");
+    const consent = data.get("consent") === "on";
+    const token = turnstile.token();
     setTone("is-info");
     setMsg("sending…");
     try {
@@ -67,9 +73,10 @@ function EarlyForm() {
         cache: "no-store",
         credentials: "omit",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, consent, token }),
       });
       const b = await r.json().catch(() => ({}));
+      turnstile.reset();
       if (r.ok) {
         setMsg("");
         setDone(true);
@@ -99,6 +106,15 @@ function EarlyForm() {
         Email
         <input name="email" type="email" placeholder="you@company.com" required autoComplete="email" />
       </label>
+      <label className="consent">
+        <input name="consent" type="checkbox" required />{" "}
+        <span>
+          Keep my email so you can write to me when a spot opens. Nothing else is sent, and one email
+          to <a href={`mailto:${CONTACT}`}>{CONTACT}</a> removes it. I have read the{" "}
+          <a href="/privacy">privacy policy</a>.
+        </span>
+      </label>
+      <Turnstile innerRef={turnstile.ref} />
       <button className="btn rq-submit" type="submit">
         Get early access
       </button>

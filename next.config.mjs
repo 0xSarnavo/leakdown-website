@@ -20,12 +20,20 @@ const nextConfig = {
       { source: "/docs/:path*", destination: "https://docs.leakdown.dev/:path*", permanent: false },
     ];
   },
+  // PostHog sets no trailing slash on /ingest/* and Next would redirect it away
+  skipTrailingSlashRedirect: true,
   async rewrites() {
-    // legacy paths stay alive for the public/app.js probe + form (03-01-PARITY.md §5)
     return [
+      // legacy paths stay alive for the public/app.js probe + form (03-01-PARITY.md §5)
       { source: "/request", destination: "/api/request" },
       { source: "/orders", destination: "/api/orders" },
       { source: "/orders/:path*", destination: "/api/orders/:path*" },
+      /* PostHog, served from our own origin. The CSP in proxy.ts trusts 'self'
+         and nothing else, so the browser must never see posthog.com — these
+         rewrites make the round trip server-side instead. US cloud; on EU cloud
+         these two hosts become eu-assets.i.posthog.com and eu.i.posthog.com. */
+      { source: "/ingest/static/:path*", destination: "https://us-assets.i.posthog.com/static/:path*" },
+      { source: "/ingest/:path*", destination: "https://us.i.posthog.com/:path*" },
     ];
   },
 };

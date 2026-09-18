@@ -77,7 +77,9 @@ export async function listOrders(): Promise<Order[]> {
 /** Early-access list: one file per email (re-signups overwrite), same bucket. */
 export async function putWaitlist(email: string) {
   const r = await s3("PUT", `waitlist/${sha256(email).slice(0, 16)}.json`, {
-    body: JSON.stringify({ email, createdAt: new Date().toISOString() }),
+    // consent is recorded, not just checked: the list is a contact list, and
+    // "they ticked the box" has to survive the request that carried it
+    body: JSON.stringify({ email, createdAt: new Date().toISOString(), consent: true }),
   });
   if (!r.ok) throw new Error(`bucket PUT ${r.status}`);
 }
@@ -160,6 +162,40 @@ export async function rateLimited(req: Request, perMinute = 10) {
     // The email-per-day key in the bucket still caps repeat orders either way.
     console.error(`rate limit store unreachable, allowing — ${(e as Error).message}`);
     return memoryLimited(ip, perMinute);
+  }
+}
+
+/**
+ * How many new records the bucket may take in a day, across everyone.
+ *
+ * The per-address limit above bounds one sender; it does not bound a thousand
+ * of them, and every accepted request writes an object that has to be stored,
+ * listed and read past forever after. This is the ceiling that holds whoever is
+ * calling: once the day's allowance is used the intake answers "full" until UTC
+ * midnight, and nothing new is written. Raise it with INTAKE_DAILY_MAX.
+ *
+ * Fails OPEN and says so, like the rate limiter: a counter outage must not shut
+ * the form. Without a shared store there is no day counter at all, which is the
+ * state to fix before this is advertised widely.
+ */
+const INTAKE_DAILY_MAX = Number(process.env.INTAKE_DAILY_MAX ?? 200);
+
+export async function intakeFull(kind: "orders" | "waitlist"): Promise<boolean> {
+  if (!KV_URL || !KV_TOKEN) return false;
+  const key = `intake:${kind}:${new Date().toISOString().slice(0, 10)}`;
+  try {
+    const r = await fetch(`${KV_URL}/pipeline`, {
+      method: "POST",
+      cache: "no-store",
+      headers: { authorization: `Bearer ${KV_TOKEN}`, "content-type": "application/json" },
+      body: JSON.stringify([["INCR", key], ["EXPIRE", key, 86400, "NX"]]),
+    });
+    if (!r.ok) throw new Error(`kv ${r.status}`);
+    const [incr] = (await r.json()) as Array<{ result: number }>;
+    return incr.result > INTAKE_DAILY_MAX;
+  } catch (e) {
+    console.error(`intake counter unreachable, allowing — ${(e as Error).message}`);
+    return false;
   }
 }
 

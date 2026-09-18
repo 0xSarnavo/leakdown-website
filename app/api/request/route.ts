@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { notFound } from "next/navigation";
-import { getOrder, ordersOn, putOrder, rateLimited, readJson, serverError, sha256, validateRequest } from "@/lib/orders";
+import { getOrder, intakeFull, ordersOn, putOrder, rateLimited, readJson, serverError, sha256, validateRequest } from "@/lib/orders";
+import { human } from "@/lib/turnstile";
 
 // node:crypto (SigV4, timing-safe compare) needs the Node runtime, which is
 // the default for route handlers but is worth pinning where hosts differ
@@ -17,11 +18,17 @@ export async function POST(req: Request) {
     if (!b) return NextResponse.json({ error: "send JSON" }, { status: 400 });
     const v = validateRequest(b);
     if (!v.ok) return NextResponse.json({ error: v.error }, { status: 400 });
+    // after validation, before anything is written: a failed check costs no storage
+    if (!(await human(b.token, "request-run", (req.headers.get("x-vercel-forwarded-for") || req.headers.get("x-forwarded-for") || "").split(",")[0].trim())))
+      return NextResponse.json({ error: "the human check did not pass — reload and try again" }, { status: 403 });
     // one order per email per day: the key is the date plus the email, so a repeat overwrites
     const id = `${new Date().toISOString().slice(0, 10)}-${sha256(v.email).slice(0, 10)}`;
     const existing = await getOrder(id);
     if (existing && existing.status !== "new")
       return NextResponse.json({ error: "one request per day — yours was already handled" }, { status: 429 });
+    // a repeat from the same email reuses its key, so only a NEW record counts
+    if (!existing && (await intakeFull("orders")))
+      return NextResponse.json({ error: "the queue is full for today — try again tomorrow" }, { status: 503 });
     await putOrder({
       id,
       url: v.target.slice(0, 300),
