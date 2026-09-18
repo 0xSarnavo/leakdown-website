@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SiteNav from "../components/site-nav";
+import LogoMark from "../components/logo-mark";
 import SiteFooter from "../components/site-footer";
 import RevealInit from "../components/reveal-init";
 import FaviconAnim from "../components/favicon-anim";
@@ -44,8 +45,28 @@ export default function RootLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
+        {/* the boot veil is set in mono: preload it too, or the first thing a
+            visitor sees is a fallback face swapping under them */}
+        <link
+          rel="preload"
+          href="/fonts/plexmono.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body>
+        {/* A held breath, not a spinner: the mark draws itself a row of dots at
+            a time, from the tip down, and then the whole veil lifts. The site's
+            own drop is the progress — nothing else on the page loads a shape
+            this recognisable this early. Pure CSS (no `lm-live`, so none of the
+            mark's idle loops run here) so it clears itself even if the bundle
+            never arrives, and so the page underneath is already painted and
+            settled the moment it goes. */}
+        <div className="boot" aria-hidden="true">
+          <LogoMark className="logo-mark boot-mark" animate={false} />
+          <span className="boot-word">Leakdown</span>
+        </div>
         <a className="skip" href="#live">
           Skip to content
         </a>

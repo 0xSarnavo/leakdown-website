@@ -16,7 +16,6 @@ export default function Privacy() {
     <main className="narrow">
       <section aria-label="Privacy policy">
         <header className="pg-head">
-          <p className="kicker">Privacy</p>
           <h1>Privacy policy</h1>
           <p className="sub">What the run-request service collects, what a run produces, who else sees it, and how to have it deleted.</p>
           <ul className="pg-meta">
@@ -52,8 +51,9 @@ export default function Privacy() {
           <ul>
             <li>
               <strong>Analytics on this site and the docs site, if you allow them.</strong> Nothing
-              is loaded and no cookie is set until you choose &quot;Allow&quot; on the bar at the
-              bottom of the page; a browser sending Do Not Track is never asked and never tracked.
+              is loaded and no cookie is set until you choose &quot;Allow&quot; on the box that
+              asks on your first visit; a browser sending Do Not Track is never asked and never
+              tracked.
               With consent, PostHog records page views, clicks and navigation, and replays of
               sessions on our own pages, to show which parts of the site people use, and sets a
               cookie and a browser-storage entry to recognise a returning browser. Everything goes

@@ -47,7 +47,6 @@ export default function SampleReport() {
     <main className="narrow">
       <section aria-label="Sample report">
         <header className="pg-head" data-reveal>
-          <p className="kicker">Sample report</p>
           <h1>What a finding looks like</h1>
           <p className="sub">
             An excerpt from a settled run on a real dev-tool site. Names withheld until the owners

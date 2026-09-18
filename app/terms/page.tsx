@@ -15,7 +15,6 @@ export default function Terms() {
     <main className="narrow">
       <section aria-label="Terms of service">
         <header className="pg-head">
-          <p className="kicker">Terms</p>
           <h1>Terms of service</h1>
           <p className="sub">Ground rules for the Leakdown alpha: what the run-request service is, what a run does to your site, and what the report is not.</p>
           <ul className="pg-meta">
