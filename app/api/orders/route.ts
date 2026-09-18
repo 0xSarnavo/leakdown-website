@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { notFound } from "next/navigation";
 import { authed, listOrders, ordersOn, serverError } from "@/lib/orders";
 
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {

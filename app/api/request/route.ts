@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { notFound } from "next/navigation";
 import { getOrder, ordersOn, putOrder, rateLimited, readJson, serverError, sha256, validateRequest } from "@/lib/orders";
 
+// node:crypto (SigV4, timing-safe compare) needs the Node runtime, which is
+// the default for route handlers but is worth pinning where hosts differ
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
@@ -9,7 +12,7 @@ export async function POST(req: Request) {
   // only turn real failures (bucket PUT/LIST, oversize body) into 500s.
   if (!ordersOn()) notFound();
   try {
-    if (rateLimited(req)) return NextResponse.json({ error: "slow down" }, { status: 429 });
+    if (await rateLimited(req)) return NextResponse.json({ error: "slow down" }, { status: 429 });
     const b = await readJson(req);
     if (!b) return NextResponse.json({ error: "send JSON" }, { status: 400 });
     const v = validateRequest(b);

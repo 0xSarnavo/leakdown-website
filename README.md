@@ -10,6 +10,23 @@ npm install
 npm run dev                # http://localhost:3000
 ```
 
+## Deploy
+
+Runs unchanged on Railway or Vercel. `railway.json` is ignored by Vercel and
+`output: "standalone"` is ignored there too, so both files can stay.
+
+| | Railway | Vercel |
+| --- | --- | --- |
+| Process model | one long-lived container | serverless, scales out |
+| Rate limit store | in-memory, nothing to set | set `UPSTASH_REDIS_REST_*` (see below) |
+| Bucket | in-project storage, or any S3 | any S3-compatible bucket |
+
+On Vercel the per-IP limit in `lib/orders.ts` is per instance unless you give it
+a shared store. Create a free Upstash Redis database and set
+`UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`; the code then counts
+there with one `fetch` and no SDK. If the store is unreachable it logs and falls
+back to the in-memory count rather than blocking the form.
+
 ## Deploy (Railway)
 
 ```bash
@@ -31,6 +48,8 @@ with `/` as the healthcheck path. `next.config.mjs` uses `output: "standalone"`.
 | `ENDPOINT`          | yes      | S3-compatible endpoint URL                          |
 | `REGION`            | no       | SigV4 region; defaults to `auto`                    |
 | `ORDERS_TOKEN`      | yes      | Bearer token guarding the operator routes           |
+| `UPSTASH_REDIS_REST_URL`   | no | Shared rate-limit counter; needed only on serverless |
+| `UPSTASH_REDIS_REST_TOKEN` | no | Its token                                           |
 
 All five of `BUCKET`, `ACCESS_KEY_ID`, `SECRET_ACCESS_KEY`, `ENDPOINT` and
 `ORDERS_TOKEN` must be set or the request flow stays off: `GET /orders`

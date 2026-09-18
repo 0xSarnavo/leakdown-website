@@ -106,18 +106,61 @@ export async function readJson(req: Request, max = 4096): Promise<Record<string,
   return b && typeof b === "object" && !Array.isArray(b) ? (b as Record<string, unknown>) : {};
 }
 
-// ponytail: per-IP token bucket in memory; enough for one box, add a store if the site ever scales out
+/**
+ * Per-IP limit, 10 a minute.
+ *
+ * One long-lived box (Railway): the in-memory map below is the whole story.
+ * Serverless (Vercel): every instance keeps its own map, so the limit is only
+ * as tight as the instance count. Set UPSTASH_REDIS_REST_URL and
+ * UPSTASH_REDIS_REST_TOKEN there and the count moves to Redis, shared by every
+ * instance. No SDK: the REST API is one fetch.
+ */
 const hits = new Map<string, number[]>();
-export function rateLimited(req: Request, perMinute = 10) {
-  // Railway's edge puts the real client address FIRST and appends whatever the client sent
-  // after it (measured 2026-09-14: taking the last entry let rotating spoofed headers through)
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "?";
+const KV_URL = process.env.UPSTASH_REDIS_REST_URL;
+const KV_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+/**
+ * The client address, first entry only.
+ * Railway's edge puts the real client address FIRST and appends whatever the
+ * client sent after it (measured 2026-09-14: taking the last entry let rotating
+ * spoofed headers through). Vercel signs its own `x-vercel-forwarded-for`,
+ * which a client cannot forge, so prefer that when it is there.
+ */
+function clientIp(req: Request) {
+  const h = req.headers;
+  return (h.get("x-vercel-forwarded-for") || h.get("x-forwarded-for") || "").split(",")[0].trim() || "?";
+}
+
+function memoryLimited(ip: string, perMinute: number) {
   const now = Date.now();
   const recent = (hits.get(ip) || []).filter((t) => now - t < 60_000);
   recent.push(now);
   hits.set(ip, recent);
   if (hits.size > 10_000) hits.clear();
   return recent.length > perMinute;
+}
+
+export async function rateLimited(req: Request, perMinute = 10) {
+  const ip = clientIp(req);
+  if (!KV_URL || !KV_TOKEN) return memoryLimited(ip, perMinute);
+  // INCR then EXPIRE ... NX in one round trip: the window starts at the first hit
+  const key = `rl:${sha256(ip).slice(0, 16)}`;
+  try {
+    const r = await fetch(`${KV_URL}/pipeline`, {
+      method: "POST",
+      cache: "no-store",
+      headers: { authorization: `Bearer ${KV_TOKEN}`, "content-type": "application/json" },
+      body: JSON.stringify([["INCR", key], ["EXPIRE", key, 60, "NX"]]),
+    });
+    if (!r.ok) throw new Error(`kv ${r.status}`);
+    const [incr] = (await r.json()) as Array<{ result: number }>;
+    return incr.result > perMinute;
+  } catch (e) {
+    // fail OPEN, and say so: a Redis blip must not take the intake form down.
+    // The email-per-day key in the bucket still caps repeat orders either way.
+    console.error(`rate limit store unreachable, allowing — ${(e as Error).message}`);
+    return memoryLimited(ip, perMinute);
+  }
 }
 
 export function authed(req: Request) {

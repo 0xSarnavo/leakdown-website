@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { notFound } from "next/navigation";
 import { authed, getOrder, ordersOn, putOrder, readJson, serverError, type Order } from "@/lib/orders";
 
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const badId = (id: string) => !/^[A-Za-z0-9._-]{1,80}$/.test(id);
