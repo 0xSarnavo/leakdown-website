@@ -5,6 +5,7 @@ Cutting a release moves that block under a version heading and bumps `package.js
 
 ## Unreleased
 
+- Repo cleanup: dropped the dead `how-section.tsx` component, `hero-graphic.svg`, and the two hero JPEGs the CSS stopped painting (moved to `../local/hero-artwork/`, 556K out of the deploy). The hero background rules no longer carry `background-image: none`.
 - Live readout: between 720px and 900px the log used to sit on top of the leak tags. The stacked narrow layout now applies under 900px.
 - README lists the `plan`, `brief` and `publish` fields on `POST /request` and the `POST /api/early-access` route. `*.tsbuildinfo` is ignored.
 - Docs moved to their own site, docs.leakdown.ai (the new leakdown-docs app). Nav 05 Docs, the footer's Docs and Changelog links point there and open in a new tab, and /docs on this site redirects to it.

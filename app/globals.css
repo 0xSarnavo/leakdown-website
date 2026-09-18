@@ -429,20 +429,15 @@ nav.sticky .nav-cta .arr { position: absolute; top: 2px; right: 8px; font-size: 
   nav.sticky .nav-cta .arr { right: 7px; }
 }
 
-/* ---------- hero: night-desk artwork, editorial stack, canvas field ---------- */
+/* ---------- hero: editorial stack over the halftone drop ---------- */
 #install {
   width: 100%;
   background-color: var(--hero-ground); color: var(--hero-ink);
-  background-image: none; /* artwork off for now; public/assets/heroimg.jpg is kept */
-  background-size: cover; background-position: center top; background-repeat: no-repeat;
   padding: 0; text-align: center;
   display: flex; flex-direction: column;
   min-height: 100svh; position: relative; overflow: visible;
 }
-html[data-theme="light"] #install {
-  background-color: var(--ground); color: var(--ink);
-  background-image: none; /* public/assets/heroimglight.jpg is kept */
-}
+html[data-theme="light"] #install { background-color: var(--ground); color: var(--ink); }
 html[data-theme="light"] #install h1 {
   color: #1C1913;
   text-shadow: 0 1px 0 rgba(255,255,255,.6), 0 2px 26px rgba(28,25,19,.18);
@@ -459,10 +454,7 @@ html[data-theme="light"] nav.sticky.over-hero .nl-group > a.nl:last-child { bord
 html[data-theme="light"] nav.sticky.over-hero .nav-cta { color: #1C1913; border-color: #1C1913; }
 html[data-theme="light"] nav.sticky.over-hero .nav-cta:hover { background: #1C1913; color: #FBF7EE; }
 @media (prefers-color-scheme: light) {
-  html[data-theme="auto"] #install {
-    background-color: var(--ground); color: var(--ink);
-    background-image: none; /* public/assets/heroimglight.jpg is kept */
-  }
+  html[data-theme="auto"] #install { background-color: var(--ground); color: var(--ink); }
   html[data-theme="auto"] #install h1 {
     color: #1C1913;
     text-shadow: 0 1px 0 rgba(255,255,255,.6), 0 2px 26px rgba(28,25,19,.18);
