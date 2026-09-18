@@ -1,15 +1,13 @@
-# Leakdown — site (Railway)
+# Leakdown — site (Next.js on Railway)
 
-One page, plain HTML/CSS/JS, served by `server.mjs` (zero dependencies). The
-same server takes alpha run requests: `POST /request` stores one JSON object
-per order in a private Railway bucket; `GET /orders` and friends sit behind
-`ORDERS_TOKEN`. Nothing runs here; the operator fulfils orders from their
-laptop with `leakdown --orders` / `--order <id>`.
+Marketing site + alpha intake API. Next.js App Router, zero extra dependencies:
+the only packages are `next`, `react`, `react-dom`.
 
 ## Local
 
 ```bash
-node server.mjs            # http://localhost:3000
+npm install
+npm run dev                # http://localhost:3000
 ```
 
 ## Deploy (Railway)
@@ -20,8 +18,8 @@ railway link               # pick the Leakdown project / website service
 railway up --detach        # deploy from this folder
 ```
 
-`railway.json` pins the Nixpacks builder and `node server.mjs` as the start
-command, with `/` as the healthcheck path. The service listens on `$PORT`.
+`railway.json` pins the Nixpacks builder and `npm start` as the start command,
+with `/` as the healthcheck path. `next.config.mjs` uses `output: "standalone"`.
 
 ## Environment variables (service dashboard)
 
@@ -41,12 +39,17 @@ falls through to a 404, and the page keeps the request form hidden with a
 
 ## Routes
 
-| Method | Path          | Auth | Behaviour                                                               |
-| ------ | ------------- | ---- | ----------------------------------------------------------------------- |
-| `POST` | `/request`    | no   | New alpha request `{url, email, consent:true}` → `201 {ok:true, id}`     |
-| `GET`  | `/orders`     | yes  | New orders, oldest first; `?all=1` includes `done`/`rejected`            |
-| `GET`  | `/orders/:id` | yes  | One order, or `404 {error:"no such order"}`                              |
-| `POST` | `/orders/:id` | yes  | Set `{status: new\|done\|rejected, note?}` (note capped at 300 chars)    |
+| Method | Path              | Auth | Behaviour                                                               |
+| ------ | ----------------- | ---- | ----------------------------------------------------------------------- |
+| `POST` | `/request`        | no   | New alpha request `{url, email, consent:true, plan?, brief?, publish?}` → `201 {ok:true, id}` |
+| `POST` | `/api/early-access` | no | Email only `{email}`; same gate, cap and rate limit as `/request`         |
+| `GET`  | `/orders`         | yes  | New orders, oldest first; `?all=1` includes `done`/`rejected`            |
+| `GET`  | `/orders/:id`     | yes  | One order, or `404 {error:"no such order"}`                              |
+| `POST` | `/orders/:id`     | yes  | Set `{status: new\|done\|rejected, note?}` (note capped at 300 chars)    |
+
+The canonical handlers live under `/api/*` (`app/api/`); `/request`,
+`/orders` and `/orders/:id` are Next.js rewrites kept alive for parity with
+the old intake form's probe + submit paths.
 
 Auth is `Authorization: Bearer $ORDERS_TOKEN` (constant-time compare).
 
@@ -56,6 +59,7 @@ Validation on `POST /request`:
   `.local`/`.internal`/`localhost`, no whitespace; truncated to 300 chars.
 - `email` must look like an email, max 120 chars (lowercased).
 - `consent` must be `true` (the "I own this site" checkbox).
+- `plan` is `full` (default) or `special`; `brief` (max 600 chars) is required with `special`; `publish` is an optional boolean.
 - One request per email per day (a repeat overwrites while still `new`; a
   handled order answers `429`).
 - Rate limit: 10 requests/min per IP (first entry of `x-forwarded-for`).
@@ -68,19 +72,27 @@ Status enum: `new` → `done` | `rejected`.
 
 ## Security headers
 
-Every response carries a strict `content-security-policy` (`default-src
-'self'`, no inline script/style, no third-party scripts, no external fonts,
-no analytics), plus `strict-transport-security` (HSTS, 1 year),
-`x-content-type-options: nosniff`, a tight `referrer-policy` and a deny-all
-`permissions-policy`. The page sets no cookies. Keep it that way: no inline
-`<script>`/`<style>`, no CDN assets, no fonts, no trackers.
+`proxy.ts` (the Next 16 name for middleware) stamps every response with a per-request-nonce CSP
+(`default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`, no
+third-party scripts, no external fonts, no analytics), plus
+`strict-transport-security` (HSTS, 1 year, includeSubDomains),
+`x-content-type-options: nosniff`, `x-frame-options: DENY`,
+`cross-origin-opener-policy: same-origin`, a tight `referrer-policy` and a
+deny-all `permissions-policy`. The page sets no cookies. Keep it that way: no
+CDN assets, no fonts, no trackers. The request API streams the body and aborts
+past 4096 chars; bearer auth is a constant-time byte compare.
+
+## Pages
+
+`/` (one-pager), `/sample-report`, `/privacy`, `/terms`, plus `app/robots.ts`
+and `app/sitemap.ts` (no static `public/robots.txt`/`sitemap.xml` — those are
+generated).
 
 ## Custom domain
 
-After pointing the domain at the Railway service:
+All canonical URLs live in code, not static files: `app/layout.tsx`
+(metadataBase, OG), `app/sitemap.ts`, `app/robots.ts`. Update those,
+redeploy (`railway up --detach`), and check the CSP header still lands.
 
-1. Update the canonical link and `og:image`/`twitter:image` in
-   `public/index.html` to the real domain.
-2. Update the `Sitemap:` line in `public/robots.txt` and every `<loc>` in
-   `public/sitemap.xml`.
-3. Redeploy (`railway up --detach`) and check the CSP header still lands.
+`parity-check.sh` runs the local status/header checks against `npm start`
+(untracked, never deployed).

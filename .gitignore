@@ -5,3 +5,6 @@ dist/
 .env.*
 *.pem
 credentials.json
+/.next/
+/out/
+*.tsbuildinfo
