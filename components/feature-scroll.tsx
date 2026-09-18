@@ -7,8 +7,15 @@ import { MARK_DOTS } from "./logo-mark";
    on a rail (done steps stack at the top, upcoming at the bottom). Right: an
    isometric stack of four plates on a dotted grid; the active step's plate
    moves to the middle and its callouts appear. Every position is a CSS class
-   keyed off data-s (nonce CSP: no style attributes). Narrow screens and
-   reduced motion get a plain stacked list (CSS media rules). */
+   keyed off data-s (nonce CSP: no style attributes).
+
+   Under 900px the same four steps become a carousel: a row of chips on top,
+   one step in hand at a time, swiped. A phone cannot spare four screens of
+   stacked prose, and pinning a section to the scroll on a touch device fights
+   the one gesture people already have. The plate art follows the active step
+   there too, so data-s is driven by the carousel's scrollLeft instead of the
+   page's scrollTop — same classes, different clock. Desktop under reduced
+   motion keeps the plain stacked list. */
 
 type Callout = { lines: string[]; x: number; y: number; side: "l" | "r"; leader: string };
 type Step = { label: string; word: string; line: string; callouts: Callout[]; cta?: boolean };
@@ -156,13 +163,35 @@ const LAYERS = [
   </Plate>,
 ];
 
+/* the breakpoint the carousel rules live behind in globals.css; the two have
+   to agree or the plate follows a clock nobody is winding */
+const NARROW = "(max-width: 900px)";
+
 export default function FeatureScroll() {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLOListElement>(null);
+  const chipsRef = useRef<HTMLDivElement>(null);
   const [s, setS] = useState(-1);
+  const [swipe, setSwipe] = useState(false);
 
+  // which clock is running: page scroll on desktop, the carousel on a phone
+  useEffect(() => {
+    let mq: MediaQueryList;
+    try {
+      mq = window.matchMedia(NARROW);
+    } catch {
+      return;
+    }
+    const read = () => setSwipe(mq.matches);
+    read();
+    mq.addEventListener("change", read);
+    return () => mq.removeEventListener("change", read);
+  }, []);
+
+  // desktop: the pinned section's progress through the viewport
   useEffect(() => {
     const wrap = wrapRef.current;
-    if (!wrap) return;
+    if (!wrap || swipe) return;
     let raf = 0;
     const read = () => {
       raf = 0;
@@ -183,7 +212,51 @@ export default function FeatureScroll() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, []);
+  }, [swipe]);
+
+  // phone: whichever panel the swipe settled on. There is no intro card to sit
+  // before the first step, so the section opens on 01 rather than on -1.
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list || !swipe) return;
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const w = list.clientWidth || 1;
+      const next = Math.max(0, Math.min(STEPS.length - 1, Math.round(list.scrollLeft / w)));
+      setS((cur) => (cur === next ? cur : next));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(read);
+    };
+    read();
+    list.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      list.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [swipe]);
+
+  /* keep the active chip in view without scrollIntoView, which would drag the
+     page vertically as well as the chip row sideways */
+  useEffect(() => {
+    const chips = chipsRef.current;
+    if (!chips || !swipe || s < 0) return;
+    const chip = chips.children[s] as HTMLElement | undefined;
+    if (!chip) return;
+    chips.scrollTo({
+      left: chip.offsetLeft - (chips.clientWidth - chip.clientWidth) / 2,
+      behavior: "smooth",
+    });
+  }, [s, swipe]);
+
+  const show = (i: number) => {
+    const list = listRef.current;
+    if (!list) return;
+    list.scrollTo({ left: i * list.clientWidth, behavior: "smooth" });
+  };
 
   const state = s < 0 ? "i" : String(s);
   const stateOf = (i: number) => (s < 0 ? "is-below" : i < s ? "is-above" : i === s ? "is-active" : "is-below");
@@ -202,7 +275,23 @@ export default function FeatureScroll() {
               you exactly where they got stuck.
             </p>
           </div>
-          <ol className="fs-list">
+          {/* phone only (CSS): the label row lifted out of each panel, so the
+              step you are on is named above the text instead of inside it */}
+          <div className="fs-chips" ref={chipsRef}>
+            {STEPS.map((st, i) => (
+              <button
+                type="button"
+                className={i === s ? "fs-chip is-on" : "fs-chip"}
+                key={st.label}
+                onClick={() => show(i)}
+                aria-current={i === s ? "true" : undefined}
+              >
+                <b>{String(i + 1).padStart(2, "0")}</b>
+                {st.label}
+              </button>
+            ))}
+          </div>
+          <ol className="fs-list" ref={listRef}>
             {STEPS.map((st, i) => (
               <li className={`fs-item ${stateOf(i)}`} key={st.label}>
                 <span className="fs-dot" aria-hidden="true" />
@@ -224,6 +313,11 @@ export default function FeatureScroll() {
               </li>
             ))}
           </ol>
+          <div className="fs-dots" aria-hidden="true">
+            {STEPS.map((st, i) => (
+              <i className={i === s ? "is-on" : undefined} key={st.label} />
+            ))}
+          </div>
         </div>
 
         <div className="fs-right" aria-hidden="true">

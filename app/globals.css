@@ -984,6 +984,64 @@ html[data-theme="light"] nav.sticky.over-hero .nav-cta:hover { background: #1C19
   .fs-strip { order: 3; padding: 16px var(--pad); font-size: 11px; }
 }
 
+/* the chips and dots belong to the carousel; on desktop the rail does the job */
+.fs-chips, .fs-dots { display: none; }
+
+/* phones and small screens: the walkthrough becomes a carousel ----------------
+
+   Stacked, the four steps are four screens of prose nobody scrolls to the end
+   of, and pinning a section to the page scroll fights the one gesture a touch
+   device already has. So: chips on top naming the step, one panel in hand,
+   swiped. The plate art below follows the active panel (feature-scroll.tsx
+   drives data-s off the carousel here, not off the page). Chips carry the
+   labels, so the label row inside each panel would only say it twice.
+
+   The breakpoint has to match NARROW in feature-scroll.tsx. */
+@media (max-width: 900px) {
+  .fs-left { padding-left: 0; padding-right: 0; }
+  .fs-wrap .fs-intro { padding: 0 var(--pad); }
+
+  .fs-chips {
+    display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain;
+    scrollbar-width: none; padding: 2px var(--pad) 4px; margin-bottom: 18px;
+  }
+  .fs-chips::-webkit-scrollbar { display: none; }
+  .fs-chip {
+    flex: none; display: flex; align-items: baseline; gap: 8px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .06em;
+    padding: 9px 15px; border-radius: var(--r-pill); min-height: 38px;
+    border: 1px solid var(--rule); background: transparent; color: var(--ink2);
+    white-space: nowrap; cursor: pointer;
+    transition: border-color .25s var(--ease), color .25s var(--ease), background-color .25s var(--ease);
+  }
+  .fs-chip b { font-weight: 400; color: var(--accent); }
+  .fs-chip.is-on { border-color: var(--accent); color: var(--ink); background: var(--lk-fill); }
+
+  /* the panels: one viewport wide, snapped, no visible scrollbar */
+  .fs-wrap .fs-list {
+    display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain; scrollbar-width: none;
+  }
+  .fs-wrap .fs-list::-webkit-scrollbar { display: none; }
+  .fs-wrap .fs-item.fs-item {
+    flex: 0 0 100%; scroll-snap-align: start;
+    position: relative; top: auto; border-top: 0; padding: 0 var(--pad) 2px;
+  }
+  /* the chip above says both of these */
+  .fs-wrap .fs-item .fs-dot, .fs-wrap .fs-item .fs-row { display: none; }
+  .fs-word { margin-top: 0; }
+
+  .fs-dots { display: flex; justify-content: center; gap: 7px; padding: 20px 0 2px; }
+  .fs-dots i {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--rule);
+    transition: background-color .3s var(--ease);
+  }
+  .fs-dots i.is-on { background: var(--accent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fs-chips, .fs-wrap .fs-list { scroll-behavior: auto; }
+}
+
 /* ---------- request: two doors + closer ---------- */
 .door h3 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: .4em 0 .3em; }
 .door pre.code { margin: 16px 0; font-size: 12px; }

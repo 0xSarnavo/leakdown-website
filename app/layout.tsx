@@ -15,18 +15,20 @@ export const metadata: Metadata = {
   description:
     "Simulated prospects walk through your signup in a real browser, think out loud, and quit the way people do. One page tells you where they stalled and why.",
   alternates: { canonical: `${SITE}/` },
+  /* No `images` here on purpose: app/opengraph-image.tsx is a file convention,
+     and Next stamps its URL into both cards. Naming an image in metadata would
+     override the generated one — which is how the old JPEG outlived two
+     renames and a colour change. */
   openGraph: {
     title: "Leakdown",
     description: "Analytics say where people leave. This says why.",
     type: "website",
     url: `${SITE}/`,
-    images: [`${SITE}/assets/og-card.jpg`],
   },
   twitter: {
     card: "summary_large_image",
     title: "Leakdown",
     description: "Analytics say where people leave. This says why.",
-    images: [`${SITE}/assets/og-card.jpg`],
   },
 };
 
