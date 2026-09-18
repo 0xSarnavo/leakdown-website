@@ -1371,18 +1371,13 @@ html.js .sec-head .sec-sub { transition-delay: 120ms; }
   html { scroll-behavior: auto; }
   .ft-top, .ft-seam, .ft-glow, .lm-fall, .lm-live .lm-row, .lm-live .lm-body, .lm-live .lm-drop, .mark .logo-mark, .mark::after { animation: none !important; }
   html.js [data-reveal] { opacity: 1; transform: none; filter: none; transition: none; }
-  #install h1 .l1, #install h1 .l2, #install .hs-stage, .ft-col a, .fq-item button span { animation: none !important; transition: none !important; }
+  .ft-col a, .fq-item button span { animation: none !important; transition: none !important; }
   .caret { animation: none; }
   .nav-menu { transition: none; }
   nav.sticky, .btn, .copy, form.request input, body, .cells, .cells > .cell, .frame, section, footer.site, pre.code { transition: none; }
 }
 
 /* ---------- site-wide motion: small, smooth, felt more than seen ---------- */
-/* the hero settles in on load: each headline line rises out of a blur, then the drop */
-@keyframes rise-in { from { opacity: 0; transform: translateY(26px); filter: blur(10px); } to { opacity: 1; transform: none; filter: none; } }
-#install h1 .l1 { animation: rise-in 1.1s cubic-bezier(.16, 1, .3, 1) .05s both; }
-#install h1 .l2 { animation: rise-in 1.1s cubic-bezier(.16, 1, .3, 1) .2s both; }
-#install .hs-stage { animation: rise-in 1.4s cubic-bezier(.16, 1, .3, 1) .35s both; }
 /* every button gives under the finger */
 .btn, .rq-btn, .term-cta .run, .nav-cta, .fs-btn, .rq-seg label, .copy, .rq-x { transition-property: background-color, color, border-color, box-shadow, transform, filter, opacity; }
 .btn:active, .rq-btn:active, .term-cta .run:active, .nav-cta:active, .fs-btn:active, .copy:active, .rq-x:active { transform: scale(.97); }
@@ -1405,11 +1400,6 @@ nav.sticky a.nl:not(.is-on):not(:hover)::after { transform: scaleX(0); }
 }
 
 /* ---------- site-wide motion: small, smooth, felt more than seen ---------- */
-/* the hero settles in on load: each headline line rises out of a blur, then the drop */
-@keyframes rise-in { from { opacity: 0; transform: translateY(26px); filter: blur(10px); } to { opacity: 1; transform: none; filter: none; } }
-#install h1 .l1 { animation: rise-in 1.1s cubic-bezier(.16, 1, .3, 1) .05s both; }
-#install h1 .l2 { animation: rise-in 1.1s cubic-bezier(.16, 1, .3, 1) .2s both; }
-#install .hs-stage { animation: rise-in 1.4s cubic-bezier(.16, 1, .3, 1) .35s both; }
 /* every button gives under the finger */
 .btn, .rq-btn, .term-cta .run, .nav-cta, .fs-btn, .rq-seg label, .copy, .rq-x { transition-property: background-color, color, border-color, box-shadow, transform, filter, opacity; }
 .btn:active, .rq-btn:active, .term-cta .run:active, .nav-cta:active, .fs-btn:active, .copy:active, .rq-x:active { transform: scale(.97); }
