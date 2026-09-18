@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Cloudflare's human check, on the two forms that write to the bucket.
@@ -16,7 +16,24 @@ import { useCallback, useEffect, useRef } from "react";
  * site; `proxy.ts` names that one origin and nothing wider.
  */
 const SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-export const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "0x4AAAAAAE8Dwm0PIzHvQ0Rx";
+const FALLBACK_KEY = "0x4AAAAAAE8Dwm0PIzHvQ0Rx";
+/** Hosts the built-in widget is registered for; a fork elsewhere must bring its own. */
+const OUR_HOSTS = new Set(["leakdown.dev", "www.leakdown.dev", "localhost", "127.0.0.1"]);
+
+/**
+ * The widget to render, or null when there is none to render.
+ *
+ * A fork that deploys this code unchanged would otherwise load OUR widget and
+ * mint tokens their secret cannot verify — every submission a 403 they cannot
+ * debug. So the built-in key is used only on the hosts it is registered for;
+ * anywhere else, set NEXT_PUBLIC_TURNSTILE_SITE_KEY or run without the check.
+ */
+export function siteKey(): string | null {
+  const fromEnv = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  if (fromEnv) return fromEnv;
+  if (typeof window === "undefined") return FALLBACK_KEY; // SSR: decided again on mount
+  return OUR_HOSTS.has(window.location.hostname) ? FALLBACK_KEY : null;
+}
 
 type TurnstileApi = {
   render: (el: HTMLElement, opts: Record<string, unknown>) => string;
@@ -59,17 +76,31 @@ function loadTurnstile(): Promise<TurnstileApi | null> {
 export function useTurnstile(action: string) {
   const ref = useRef<HTMLDivElement>(null);
   const id = useRef<string | null>(null);
+  /** null while loading, true once rendered, false when the script never arrived */
+  const [ready, setReady] = useState<boolean | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+    const key = siteKey();
+    if (!key) {
+      setReady(true); // no widget here by design; the server is not checking either
+      return;
+    }
     void loadTurnstile().then((api) => {
-      if (cancelled || !api || !ref.current || id.current) return;
-      id.current = api.render(ref.current, {
-        sitekey: SITE_KEY,
-        action,
-        appearance: "interaction-only",
-        theme: "auto",
-      });
+      if (cancelled) return;
+      if (!api || !ref.current) {
+        setReady(false); // blocked, offline, or too slow — the form must say so
+        return;
+      }
+      if (!id.current) {
+        id.current = api.render(ref.current, {
+          sitekey: key,
+          action,
+          appearance: "interaction-only",
+          theme: "auto",
+        });
+      }
+      setReady(true);
     });
     return () => {
       cancelled = true;
@@ -87,7 +118,7 @@ export function useTurnstile(action: string) {
     if (id.current && window.turnstile) window.turnstile.reset(id.current);
   }, []);
 
-  return { ref, token, reset };
+  return { ref, token, reset, ready };
 }
 
 export default function Turnstile({ innerRef }: { innerRef: React.RefObject<HTMLDivElement | null> }) {

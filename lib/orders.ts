@@ -28,6 +28,20 @@ export const ordersOn = () =>
   !!(S3.bucket && S3.keyId && S3.secret && S3.endpoint && ORDERS_TOKEN);
 
 export const sha256 = (s: string) => createHash("sha256").update(s).digest("hex");
+
+/**
+ * Said once per instance, at the first intake request: storage open, bot check
+ * off. That is the shape a preview deploy has by default, and it is also the
+ * shape a production deploy has when TURNSTILE_SECRET was never set — the
+ * difference matters and nothing else would say so.
+ */
+let warned = false;
+export function warnIfUnguarded(humanCheckOn: boolean): void {
+  if (warned || !ordersOn() || humanCheckOn) return;
+  warned = true;
+  console.warn("intake is open with no human check — TURNSTILE_SECRET is not set on this deployment");
+}
+
 const hmac = (k: Buffer | string, s: string) => createHmac("sha256", k).update(s).digest();
 
 /** AWS SigV4 for one S3 request on the bucket's virtual-hosted URL. No SDK: ~30 lines. */
@@ -180,23 +194,48 @@ export async function rateLimited(req: Request, perMinute = 10) {
  */
 const INTAKE_DAILY_MAX = Number(process.env.INTAKE_DAILY_MAX ?? 200);
 
-export async function intakeFull(kind: "orders" | "waitlist"): Promise<boolean> {
-  if (!KV_URL || !KV_TOKEN) return false;
-  const key = `intake:${kind}:${new Date().toISOString().slice(0, 10)}`;
+const intakeKey = (kind: "orders" | "waitlist") =>
+  `intake:${kind}:${new Date().toISOString().slice(0, 10)}`;
+
+async function kv(commands: (string | number)[][]): Promise<unknown[] | null> {
+  if (!KV_URL || !KV_TOKEN) return null;
   try {
     const r = await fetch(`${KV_URL}/pipeline`, {
       method: "POST",
       cache: "no-store",
       headers: { authorization: `Bearer ${KV_TOKEN}`, "content-type": "application/json" },
-      body: JSON.stringify([["INCR", key], ["EXPIRE", key, 86400, "NX"]]),
+      body: JSON.stringify(commands),
+      signal: AbortSignal.timeout(2_000),
     });
     if (!r.ok) throw new Error(`kv ${r.status}`);
-    const [incr] = (await r.json()) as Array<{ result: number }>;
-    return incr.result > INTAKE_DAILY_MAX;
+    return ((await r.json()) as Array<{ result: unknown }>).map((e) => e.result);
   } catch (e) {
     console.error(`intake counter unreachable, allowing — ${(e as Error).message}`);
-    return false;
+    return null;
   }
+}
+
+/** Reads the day's count. Does not spend it — `intakeDone` does, after the write. */
+export async function intakeFull(kind: "orders" | "waitlist"): Promise<boolean> {
+  const res = await kv([["GET", intakeKey(kind)]]);
+  const raw = res?.[0];
+  const used = typeof raw === "string" ? Number(raw) : typeof raw === "number" ? raw : 0;
+  return Number.isFinite(used) && used >= INTAKE_DAILY_MAX;
+}
+
+/**
+ * Counts one accepted record, after it is safely stored.
+ *
+ * Counting before the write would let a flaking bucket eat the day's allowance
+ * without a single record to show for it. The order costs a small race — a burst
+ * can overshoot by however many requests are in flight — which is the right way
+ * round for a ceiling whose job is bounding a day, not a millisecond.
+ */
+export async function intakeDone(kind: "orders" | "waitlist"): Promise<void> {
+  await kv([
+    ["INCR", intakeKey(kind)],
+    ["EXPIRE", intakeKey(kind), 86400, "NX"],
+  ]);
 }
 
 export function authed(req: Request) {

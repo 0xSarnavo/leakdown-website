@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { notFound } from "next/navigation";
-import { intakeFull, ordersOn, putWaitlist, rateLimited, readJson, serverError, validEmail } from "@/lib/orders";
-import { human } from "@/lib/turnstile";
+import { warnIfUnguarded, intakeDone, intakeFull, ordersOn, putWaitlist, rateLimited, readJson, serverError, validEmail } from "@/lib/orders";
+import { human, turnstileOn } from "@/lib/turnstile";
 
 // node:crypto (SigV4, timing-safe compare) needs the Node runtime, which is
 // the default for route handlers but is worth pinning where hosts differ
@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   if (!ordersOn()) notFound();
   try {
+    warnIfUnguarded(turnstileOn());
     if (await rateLimited(req)) return NextResponse.json({ error: "slow down" }, { status: 429 });
     const b = await readJson(req, 512);
     if (!b) return NextResponse.json({ error: "send JSON" }, { status: 400 });
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
     if (await intakeFull("waitlist"))
       return NextResponse.json({ error: "the list is full for today — try again tomorrow" }, { status: 503 });
     await putWaitlist(email);
+    await intakeDone("waitlist");
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (e) {
     return serverError("POST /api/early-access", e);

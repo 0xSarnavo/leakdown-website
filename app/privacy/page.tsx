@@ -15,17 +15,40 @@ export default function Privacy() {
   return (
     <main className="narrow">
       <section aria-label="Privacy policy">
-        <h1>Privacy policy</h1>
-        <p className="sub">Last updated 18 September 2026.</p>
-        <div className="prose">
+        <header className="pg-head">
+          <p className="kicker">Privacy</p>
+          <h1>Privacy policy</h1>
+          <p className="sub">What the run-request service collects, what a run produces, who else sees it, and how to have it deleted.</p>
+          <ul className="pg-meta">
+            <li>Operator <b>Sarnavo Saha Sardar</b></li>
+            <li>Jurisdiction <b>India</b></li>
+            <li>Updated <b>18 Sep 2026</b></li>
+          </ul>
+        </header>
+        <div className="prose" data-reveal>
           <p>
             This site and the run-request service are operated by Sarnavo Saha Sardar, an individual
             based in India. Questions and requests go to{" "}
             <a href={`mailto:${CONTACT}`}>{CONTACT}</a>. The open-source tool runs
             on your own computer and sends nothing here — the last section covers it.
-          </p>
-
-          <h3>What this website collects</h3>
+          </p></div>
+        <ul className="pg-toc" data-reveal>
+          <li><a href="#what-this-website-collects"><i>01</i>What this website collects</a></li>
+          <li><a href="#what-a-requested-run-produces"><i>02</i>What a requested run produces</a></li>
+          <li><a href="#who-else-sees-it"><i>03</i>Who else sees it</a></li>
+          <li><a href="#your-analytics-choice"><i>04</i>Your analytics choice</a></li>
+          <li><a href="#how-long-it-is-kept"><i>05</i>How long it is kept</a></li>
+          <li><a href="#site-names-in-public"><i>06</i>Site names in public</a></li>
+          <li><a href="#age"><i>07</i>Age</a></li>
+          <li><a href="#the-open-source-tool"><i>08</i>The open-source tool</a></li>
+          <li><a href="#changes"><i>09</i>Changes</a></li>
+        </ul>
+        <section className="pg-sec" id="what-this-website-collects" data-reveal>
+          <div className="pg-sec-h">
+            <span className="n">01</span>
+            <h2>What this website collects</h2>
+          </div>
+          <div className="prose">
           <ul>
             <li>
               <strong>Analytics on this site and the docs site, if you allow them.</strong> Nothing
@@ -74,9 +97,14 @@ export default function Privacy() {
             <li>
               <strong>If you email directly:</strong> whatever you put in the email.
             </li>
-          </ul>
-
-          <h3>What a requested run produces</h3>
+          </ul></div>
+        </section>
+        <section className="pg-sec" id="what-a-requested-run-produces" data-reveal>
+          <div className="pg-sec-h">
+            <span className="n">02</span>
+            <h2>What a requested run produces</h2>
+          </div>
+          <div className="prose">
           <p>
             The operator starts each run by hand on their own computer — nothing runs automatically
             when you submit the form. The URL is checked for shape, not fetched, until the operator
@@ -95,9 +123,14 @@ export default function Privacy() {
           <p>
             All of it is stored on the operator&apos;s computer, not on this website. The report is
             emailed to the address you gave, as a PDF.
-          </p>
-
-          <h3>Who else sees it</h3>
+          </p></div>
+        </section>
+        <section className="pg-sec" id="who-else-sees-it" data-reveal>
+          <div className="pg-sec-h">
+            <span className="n">03</span>
+            <h2>Who else sees it</h2>
+          </div>
+          <div className="prose">
           <ul>
             <li>The hosting provider runs this site; a private bucket holds the request records.</li>
             <li>A key-value provider holds the one-minute rate-limit counters.</li>
@@ -116,12 +149,22 @@ export default function Privacy() {
           <p>
             Nothing is sold or shared for advertising. We write to you about your own request, and,
             if you joined the early-access list, once when a spot opens — nothing else.
-          </p>
-
-          <h3>Your analytics choice</h3>
-          <ConsentChoice />
-
-          <h3>How long it is kept</h3>
+          </p></div>
+        </section>
+        <section className="pg-sec" id="your-analytics-choice" data-reveal>
+          <div className="pg-sec-h">
+            <span className="n">04</span>
+            <h2>Your analytics choice</h2>
+          </div>
+          <div className="prose">
+          <ConsentChoice /></div>
+        </section>
+        <section className="pg-sec" id="how-long-it-is-kept" data-reveal>
+          <div className="pg-sec-h">
+            <span className="n">05</span>
+            <h2>How long it is kept</h2>
+          </div>
+          <div className="prose">
           <p>
             Until you ask. Email <a href={`mailto:${CONTACT}`}>{CONTACT}</a> from
             the address you used, and the request record, the run folder with its screenshots and
@@ -134,35 +177,55 @@ export default function Privacy() {
             Runs are kept while the alpha runs, so the tool can be improved against real journeys.
             They are not sold, not published, and not handed to anyone beyond the recipients listed
             above.
-          </p>
-
-          <h3>Site names in public</h3>
+          </p></div>
+        </section>
+        <section className="pg-sec" id="site-names-in-public" data-reveal>
+          <div className="pg-sec-h">
+            <span className="n">06</span>
+            <h2>Site names in public</h2>
+          </div>
+          <div className="prose">
           <p>
             A tested site is named publicly only with its owner&apos;s written consent — the tick box
             on the request form, or an email saying so. Until then it appears under a placeholder
             such as &quot;site-g&quot;. Change your mind and it comes down.
-          </p>
-
-          <h3>Age</h3>
+          </p></div>
+        </section>
+        <section className="pg-sec" id="age" data-reveal>
+          <div className="pg-sec-h">
+            <span className="n">07</span>
+            <h2>Age</h2>
+          </div>
+          <div className="prose">
           <p>
             The service is for people who run, or are authorised to test, a website. It is not
             intended for anyone under 18.
-          </p>
-
-          <h3>The open-source tool</h3>
+          </p></div>
+        </section>
+        <section className="pg-sec" id="the-open-source-tool" data-reveal>
+          <div className="pg-sec-h">
+            <span className="n">08</span>
+            <h2>The open-source tool</h2>
+          </div>
+          <div className="prose">
           <p>
             When you run Leakdown yourself, nothing is sent to this website. Sessions, recordings and
             reports stay on your machine. Your chosen AI provider sees the pages your prospects
             visit, and if you configure a mailbox, verification emails land in it. What that provider
             keeps is governed by your agreement with them.
-          </p>
-
-          <h3>Changes</h3>
+          </p></div>
+        </section>
+        <section className="pg-sec" id="changes" data-reveal>
+          <div className="pg-sec-h">
+            <span className="n">09</span>
+            <h2>Changes</h2>
+          </div>
+          <div className="prose">
           <p>
             Changes are made here, with the date at the top. Material changes to what is collected
             are also noted on the request form.
-          </p>
-        </div>
+          </p></div>
+        </section>
       </section>
     </main>
   );

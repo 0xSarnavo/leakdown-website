@@ -35,6 +35,9 @@ function Box({ id, title, open, onClose, children }: {
         if (e.target === e.currentTarget) onClose();
       }}
     >
+      {/* Mounted only while open: Turnstile renders into a hidden container
+          badly, and a widget built behind a closed dialog is a widget that is
+          not there when the form is finally used. */}
       <div className="rq-card">
         <div className="rq-card-head">
           <div className="rq-title">
@@ -47,7 +50,7 @@ function Box({ id, title, open, onClose, children }: {
             </svg>
           </button>
         </div>
-        {children}
+        {open ? children : null}
       </div>
     </dialog>
   );
@@ -115,6 +118,13 @@ function EarlyForm() {
         </span>
       </label>
       <Turnstile innerRef={turnstile.ref} />
+      {turnstile.ready === false ? (
+        <p className="rq-hint">
+          The human check could not load — an ad blocker or a strict network usually does this.
+          Allow <code>challenges.cloudflare.com</code>, or{" "}
+          <a href={`mailto:${CONTACT}`}>email me instead</a>.
+        </p>
+      ) : null}
       <button className="btn rq-submit" type="submit">
         Get early access
       </button>

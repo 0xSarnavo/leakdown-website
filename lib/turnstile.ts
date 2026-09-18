@@ -21,11 +21,20 @@ const VERIFY = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 /** Cloudflare's published testing keys. They answer with action "test" on any host. */
 const DUMMY_SECRET = /^[123]x0{10}/;
 
+/**
+  * Allowed hostnames, each stored apex-and-www.
+  *
+  * siteverify reports the host that actually served the page, so a visitor on
+  * `www.` would be refused by an allowlist that named only the apex — a
+  * rejection nobody would think to look for. Both spellings of one name are one
+  * site; a different name is still refused.
+  */
 const hostnames = new Set(
   (process.env.TURNSTILE_HOSTNAMES ?? "")
     .split(",")
-    .map((h) => h.trim())
-    .filter(Boolean),
+    .map((h) => h.trim().toLowerCase())
+    .filter(Boolean)
+    .flatMap((h) => (h.startsWith("www.") ? [h, h.slice(4)] : [h, `www.${h}`])),
 );
 
 export const turnstileOn = (): boolean => Boolean(SECRET);
@@ -62,7 +71,7 @@ export async function human(token: unknown, action: string, ip: string): Promise
     console.warn(`turnstile action mismatch: got ${result.action}, expected ${action}`);
     return false;
   }
-  if (hostnames.size === 0 || !result.hostname || !hostnames.has(result.hostname)) {
+  if (hostnames.size === 0 || !result.hostname || !hostnames.has(result.hostname.toLowerCase())) {
     console.warn(`turnstile hostname not allowed: ${result.hostname}`);
     return false;
   }

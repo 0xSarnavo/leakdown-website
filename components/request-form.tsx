@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CONTACT } from "../lib/site";
+import { CAL, CONTACT } from "../lib/site";
 import Turnstile, { useTurnstile } from "./turnstile";
 
 /* Request door, ported 1:1 from public/app.js (26 lines). Legacy paths only:
@@ -162,6 +162,13 @@ export default function RequestForm({ idPrefix = "request" }: { idPrefix?: strin
           </span>
         </label>
         <Turnstile innerRef={turnstile.ref} />
+        {turnstile.ready === false ? (
+          <p className="rq-hint">
+            The human check could not load — an ad blocker or a strict network usually does this.
+            Allow <code>challenges.cloudflare.com</code>, or{" "}
+            <a href={`mailto:${CONTACT}`}>email the request instead</a>.
+          </p>
+        ) : null}
         <button className="btn rq-submit" type="submit">
           Request a run
         </button>
@@ -169,10 +176,23 @@ export default function RequestForm({ idPrefix = "request" }: { idPrefix?: strin
         <p className={tone ? `reqmsg ${tone}` : "reqmsg"} aria-live="polite">
           {msg}
         </p>
+        {/* Only once a request is in. Before that it competes with the form, and
+            the form is the thing that costs the reader nothing to finish. */}
+        {tone === "is-ok" ? (
+          <p className="rq-hint rq-cal">
+            Want to talk it through while you wait?{" "}
+            <a href={CAL} target="_blank" rel="noopener noreferrer">
+              Book 30 minutes ↗
+            </a>
+          </p>
+        ) : null}
       </form>
       <p className="small" id={`${idPrefix}-closed`} hidden={open}>
-        Requests are closed right now. Run it yourself, or{" "}
-        <a href={`mailto:${CONTACT}`}>email me</a>.
+        Requests are closed right now. Run it yourself,{" "}
+        <a href={CAL} target="_blank" rel="noopener noreferrer">
+          book a call ↗
+        </a>
+        , or <a href={`mailto:${CONTACT}`}>email me</a>.
       </p>
     </>
   );

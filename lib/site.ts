@@ -18,6 +18,11 @@ export const DOCS = "https://docs.leakdown.dev";
    contact point could never be handed to anyone else without editing the site. */
 export const CONTACT = "talk@leakdown.dev";
 
+/* A 30-minute call. Offered after a request lands, not before it: the form is
+   the cheap ask and the call is the expensive one, and putting the expensive
+   one first loses the people who would have just filled the form in. */
+export const CAL = "https://cal.com/leakdown/30min";
+
 // links to other sites open in a new tab
 export const EXT = { target: "_blank", rel: "noopener noreferrer" } as const;
 export const ext = (href: string) => (/^https?:/.test(href) ? EXT : {});

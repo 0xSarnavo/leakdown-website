@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { notFound } from "next/navigation";
-import { getOrder, intakeFull, ordersOn, putOrder, rateLimited, readJson, serverError, sha256, validateRequest } from "@/lib/orders";
-import { human } from "@/lib/turnstile";
+import { warnIfUnguarded, getOrder, intakeDone, intakeFull, ordersOn, putOrder, rateLimited, readJson, serverError, sha256, validateRequest } from "@/lib/orders";
+import { human, turnstileOn } from "@/lib/turnstile";
 
 // node:crypto (SigV4, timing-safe compare) needs the Node runtime, which is
 // the default for route handlers but is worth pinning where hosts differ
@@ -13,6 +13,7 @@ export async function POST(req: Request) {
   // only turn real failures (bucket PUT/LIST, oversize body) into 500s.
   if (!ordersOn()) notFound();
   try {
+    warnIfUnguarded(turnstileOn());
     if (await rateLimited(req)) return NextResponse.json({ error: "slow down" }, { status: 429 });
     const b = await readJson(req);
     if (!b) return NextResponse.json({ error: "send JSON" }, { status: 400 });
@@ -39,6 +40,7 @@ export async function POST(req: Request) {
       ...(v.brief ? { brief: v.brief } : {}),
       publish: v.publish,
     });
+    if (!existing) await intakeDone("orders");
     return NextResponse.json({ ok: true, id }, { status: 201 });
   } catch (e) {
     return serverError("POST /request", e);

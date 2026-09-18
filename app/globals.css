@@ -1131,6 +1131,9 @@ html:has(.rq-dialog[open]) { overflow: hidden; }
 .rq-seg label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 1px; }
 .rq-inc { margin: 10px 0 0; font-size: 13px; line-height: 1.55; color: var(--ink2); }
 .rq-hint { margin: -6px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--ink2); }
+/* the call offer sits under the success line, so it needs space above, not the negative pull the field hint uses */
+.rq-cal { margin-top: 10px; }
+.rq-cal a { color: var(--accent); }
 .rq-brief { display: block; margin: 10px 0 0 !important; }
 .rq-brief textarea {
   display: block; width: 100%; padding: 10px 12px; resize: vertical;
@@ -1698,3 +1701,86 @@ nav.sticky a.nl:not(.is-on):not(:hover)::after { transform: scaleX(0); }
 .consent-actions { display: flex; gap: 10px; }
 .consent-bar .btn { padding: 7px 16px; font-size: 13px; }
 @media (max-width: 560px) { .consent-bar { justify-content: flex-start; } }
+
+/* ---------- subpage furniture: sample report + legal ----------
+
+   These pages were three prose columns with a serif h1 on top — correct, and
+   indistinguishable from each other or from anything else. They borrow the
+   vocabulary the rest of the site already speaks: a monospace kicker like the
+   nav's "01 LIVE", serif display, and metadata in mono because on this site
+   mono means "measured, not written". */
+
+.pg-head { border-bottom: 1px solid var(--rule); padding-bottom: 26px; margin-bottom: 34px; }
+.pg-head h1 { margin: .18em 0 .22em; }
+.pg-head .sub { max-width: 34em; }
+
+/* the run's facts, or the document's: same treatment, because both are things
+   you check rather than read */
+.pg-meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 20px 0 0; padding: 0; list-style: none; }
+.pg-meta li { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; color: var(--ink2); text-transform: uppercase; }
+.pg-meta b { color: var(--ink); font-weight: 500; }
+
+/* jump links: privacy and terms are long, and nobody reads them top to bottom —
+   they arrive looking for one answer */
+.pg-toc { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 38px; padding: 0; list-style: none; }
+.pg-toc a {
+  display: inline-block; font-family: var(--mono); font-size: 12px; letter-spacing: .04em;
+  color: var(--ink2); text-decoration: none; border: 1px solid var(--rule);
+  border-radius: var(--r-pill); padding: 5px 12px; transition: border-color .2s var(--ease), color .2s var(--ease);
+}
+.pg-toc a:hover { border-color: var(--accent); color: var(--ink); }
+.pg-toc a i { font-style: normal; color: var(--accent); margin-right: 7px; }
+
+.pg-sec { scroll-margin-top: calc(var(--nav-h) + 24px); margin: 0 0 6px; }
+.pg-sec + .pg-sec { margin-top: 44px; }
+.pg-sec-h { display: flex; align-items: baseline; gap: 14px; margin: 0 0 4px; }
+.pg-sec-h .n { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .1em; flex: none; }
+.pg-sec-h h2 { font-size: clamp(22px, 2.4vw, 28px); }
+
+/* the sentences that matter more than the paragraph around them */
+.pg-note {
+  margin: 22px 0; padding: 16px 18px; border: 1px solid var(--rule);
+  border-left: 2px solid var(--accent); border-radius: 0 var(--r-m) var(--r-m) 0;
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+.pg-note p { margin: 0; font-size: 15px; color: var(--ink2); max-width: 44em; }
+.pg-note p + p { margin-top: 8px; }
+.pg-note b { color: var(--ink); }
+
+/* ---------- the sample report itself ---------- */
+
+/* A run has a shape — ten prospects, a date, a verdict — and the page should
+   show it before the findings, the way the real AGGREGATE.md does. */
+.rep-card {
+  border: 1px solid var(--rule); border-radius: var(--r-l); overflow: hidden;
+  background: var(--paper); margin: 0 0 34px;
+}
+.rep-card-h {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+  padding: 12px 18px; border-bottom: 1px solid var(--rule); background: var(--ground);
+  font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink2);
+}
+.rep-card-h .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; }
+.rep-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 1px; background: var(--rule); }
+.rep-stat { background: var(--paper); padding: 16px 18px; }
+.rep-stat b { display: block; font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1; color: var(--ink); }
+.rep-stat span { display: block; margin-top: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink2); }
+
+.rep-find { border: 1px solid var(--rule); border-radius: var(--r-l); padding: 22px; margin: 0 0 16px; background: var(--paper); }
+.rep-find:hover { border-color: color-mix(in srgb, var(--accent) 40%, var(--rule)); }
+.rep-find h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(19px, 2vw, 23px); line-height: 1.25; margin: 12px 0 10px; }
+.rep-find p { color: var(--ink2); font-size: 15.5px; line-height: 1.6; margin: 0; max-width: 46em; }
+
+/* ten dots, filled by how many sessions cited it — the same 1/10 motif the
+   hero uses, so a finding's weight is visible before the sentence is read */
+.rep-cite { display: flex; align-items: center; gap: 10px; }
+.rep-dots { display: flex; gap: 3px; }
+.rep-dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--rule); }
+.rep-dots i.on { background: var(--accent); }
+.rep-cite span { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink2); }
+
+/* the instruction is the product: it gets its own surface, in mono, because it
+   is a thing you go and do rather than a thing you agree with */
+.rep-check { margin: 16px 0 0; padding: 12px 14px; border-radius: var(--r-m); background: var(--ground); border: 1px solid var(--rule); }
+.rep-check b { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.rep-check p { font-size: 14.5px; color: var(--ink2); margin: 0; }
